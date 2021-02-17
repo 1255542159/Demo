@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.club.mapper.ClubMapper">
+
+    <resultMap id="baseMap" type="com.example.demo.business.club.entity.Club">
+        <id property="id" column="ID"/>
+        <result property="clubName" column="CLUB_NAME"/>
+        <result property="clubCreator" column="CLUB_CREATOR"/>
+        <result property="leaderId" column="LEADER_ID"/>
+        <result property="clubIntroduce" column="CLUB_INTRODUCE"/>
+        <result property="clubDesc" column="CLUB_DESC"/>
+        <result property="clubImg" column="CLUB_IMG"/>
+        <result property="isDelete" column="IS_DELETE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+
+    </resultMap>
+
+    <select id="findAll" resultMap="baseMap">
+        select *from club
+    </select>
+
+
+
+
+</mapper>

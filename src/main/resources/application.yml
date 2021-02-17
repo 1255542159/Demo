@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://106.15.248.56:3306/cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456Qwe
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  pageSizeZero: false #pageSize=0
+
+
+
+
+

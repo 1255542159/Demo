@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.user.mapper.UserMapper">
+
+    <resultMap id="baseMap" type="com.example.demo.business.user.entity.User">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="NICK_NAME" property="nickName"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="SEX" property="sex"/>
+        <result column="AVATAR" property="avatar"/>
+        <result column="PHONE" property="phone"/>
+        <result column="EMAIL" property="email"/>
+        <result column="SIGN" property="sign"/>
+        <result column="STATUS" property="status"/>
+        <result column="REG_ID" property="regIp"/>
+        <result column="LOGIN_IP" property="loginIp"/>
+        <result column="CLUB_ID" property="clubId"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <!--关联查询-->
+        <collection property="roles" column="ID" ofType="com.example.demo.business.user.entity.Role"
+                    select="com.example.demo.business.user.mapper.RoleMapper.findRolesByUserId"/>
+    </resultMap>
+
+
+    <resultMap id="baseMenu" type="com.example.demo.business.user.entity.Menu">
+        <id column="ID" property="id"/>
+        <result column="URL" property="url"/>
+        <result column="PATH" property="path"/>
+        <result column="COMPONENT" property="component"/>
+        <result column="NAME" property="name"/>
+        <result column="ICON" property="icon"/>
+        <result column="KEEPALIVE" property="keepAlive"/>
+        <result column="REQUIRE_AUTH" property="requireAuth"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="MENU_LEVEL" property="menuLevel"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+    <select id="findUserByPhone" resultMap="baseMap">
+        select * from `user` where phone = #{phone};
+    </select>
+    <select id="getMenuList" resultMap="baseMenu">
+            select m.ID,
+            m.URL,
+            m.PATH,
+            m.COMPONENT,
+            m.NAME,
+            m.ICON,
+            m.KEEPALIVE,
+            m.REQUIRE_AUTH,
+            m.PARENT_ID,
+            m.MENU_LEVEL
+            from role_menu rm
+            right join menu m on rm.MENU_ID = m.ID
+            where rm.ROLE_ID = #{id}
+    </select>
+
+
+</mapper>

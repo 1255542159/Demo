@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.user.mapper.RoleMapper">
+
+    <resultMap id="baseMap" type="com.example.demo.business.user.entity.Role">
+        <id property="id" column="ID"/>
+        <result property="roleName" column="ROLE_NAME"/>
+        <result property="roleDesc" column="ROLE_DESC"/>
+        <result property="status" column="STATUS"/>
+        <result property="isDelete" column="IS_DELETE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+
+    </resultMap>
+
+    <select id="findRolesByUserId" resultMap="baseMap">
+       SELECT r.* FROM user_role ur LEFT JOIN role r ON r.id = ur.role_id WHERE ur.user_id = #{userId}
+    </select>
+
+
+</mapper>
