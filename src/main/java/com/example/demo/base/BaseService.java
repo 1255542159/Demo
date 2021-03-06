@@ -15,32 +15,30 @@ public interface BaseService<T> {
      * @param entity
      * @return
      */
-    int save(T entity);
+    ResponseVo save(T entity);
 
     /**
      * 删除
-     * @param entity
+     * @param id
      * @return
      */
-    int remove(T entity);
+    ResponseVo remove(Integer id);
 
     /**
      * 更新
      * @param entity
      * @return
      */
-    int update(T entity);
-
-    /**
-     * 根据id查找
-     * @param id
-     * @return
-     */
-    T findById(Serializable id);
+    ResponseVo update(T entity);
 
     /**
      * 查询所有
+     * @param page
+     * @param size
+     * @param keyWords
      * @return
      */
-    List<T> findAll();
+    ResponseVo getList(int page,int size, String keyWords);
+
+
 }

@@ -15,14 +15,65 @@
         <result property="isDelete" column="IS_DELETE"/>
         <result property="createTime" column="CREATE_TIME"/>
         <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="amount" column="AMOUNT"/>
 
     </resultMap>
+    <insert id="save" parameterType="com.example.demo.business.club.entity.Club">
+    insert into
+        club(
+       CLUB_NAME,
+       CLUB_CREATOR,
+       LEADER_ID,
+       CLUB_INTRODUCE,
+       CLUB_DESC,
+       CLUB_IMG,
+       IS_DELETE,
+       CREATE_TIME,
+       UPDATE_TIME
+        )
+        values (
+        #{clubName},
+        #{clubCreator},
+        #{leaderId},
+        #{clubIntroduce},
+        #{clubDesc},
+        #{clubImg},
+        #{isDelete},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+    <update id="update">
+        update club
+        set
+        CLUB_NAME = #{clubName},
+        CLUB_CREATOR = #{clubCreator},
+        LEADER_ID = #{leaderId},
+        CLUB_INTRODUCE = #{clubIntroduce},
+        CLUB_DESC = #{clubDesc},
+        CLUB_IMG = #{clubImg},
+        UPDATE_TIME = #{updateTime},
+        IS_DELETE = #{isDelete}
+        where
+        ID = #{id}
+    </update>
+    <delete id="remove">
+    delete from club where ID = #{id}
+    </delete>
 
     <select id="findAll" resultMap="baseMap">
-        select *from club
+        select c.id,c.CLUB_NAME,c.CLUB_CREATOR,c.LEADER_ID,c.CLUB_INTRODUCE,c.CLUB_IMG,c.IS_DELETE,c.CREATE_TIME,c.UPDATE_TIME,
+        c.CLUB_DESC,
+u.AMOUNT AS AMOUNT
+from club c
+left join  (select count(1) as AMOUNT,CLUB_ID from user where status =0 GROUP BY CLUB_ID) u
+on u.CLUB_ID = c.id
+GROUP BY c.id
     </select>
 
-
+    <select id="findClubById" resultMap="baseMap">
+        select *from club where id=#{clubId}
+    </select>
 
 
 </mapper>

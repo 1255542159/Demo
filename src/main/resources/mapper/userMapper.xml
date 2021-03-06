@@ -42,8 +42,42 @@
         <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="userMap" type="com.example.demo.business.user.entity.UserVo">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="NICK_NAME" property="nickName"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="SEX" property="sex"/>
+        <result column="AVATAR" property="avatar"/>
+        <result column="PHONE" property="phone"/>
+        <result column="EMAIL" property="email"/>
+        <result column="SIGN" property="sign"/>
+        <result column="STATUS" property="status"/>
+        <result column="REG_ID" property="regIp"/>
+        <result column="LOGIN_IP" property="loginIp"/>
+        <result column="CLUB_ID" property="clubId"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <!--关联查询-->
+        <collection property="club" column="CLUB_ID" ofType="com.example.demo.business.club.entity.Club"
+                    select="com.example.demo.business.club.mapper.ClubMapper.findClubById"/>
+    </resultMap>
+    <update id="update" parameterType="com.example.demo.business.user.entity.User">
+        update `user`
+        set
+            `NAME` = #{name},
+            SEX = #{sex},
+            PHONE = #{phone},
+            EMAIL = #{email},
+            STATUS = #{status},
+            CLUB_ID = #{clubId},
+            UPDATE_TIME = #{updateTime}
+        where ID = #{id};
+    </update>
+
     <select id="findUserByPhone" resultMap="baseMap">
-        select * from `user` where phone = #{phone};
+        select * from `user` where phone = #{phone} and status = 0;
     </select>
     <select id="getMenuList" resultMap="baseMenu">
             select m.ID,
@@ -59,6 +93,13 @@
             from role_menu rm
             right join menu m on rm.MENU_ID = m.ID
             where rm.ROLE_ID = #{id}
+    </select>
+    <select id="findAll" resultType="com.example.demo.business.user.entity.User">
+
+    </select>
+    <select id="getListByClubId" resultMap="userMap">
+        select *from `user`
+        where PARENT_ID = #{userId}
     </select>
 
 

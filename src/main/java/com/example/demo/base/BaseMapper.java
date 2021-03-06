@@ -22,10 +22,10 @@ public interface BaseMapper<T> {
 
     /**
      * 删除
-     * @param entity
+     * @param id
      * @return
      */
-    int remove(T entity);
+    int remove(Integer id);
 
     /**
      * 更新

@@ -1,6 +1,7 @@
 package com.example.demo.business.user.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,9 +43,9 @@ public class User implements UserDetails {
     @ApiModelProperty(notes = "登录IP")
     private String loginIp;
     @ApiModelProperty(notes = "社团ID")
-    private Long clubId;
+    private Integer clubId;
     @ApiModelProperty(notes = "负责人ID")
-    private Long parentId;
+    private Integer parentId;
     @ApiModelProperty(notes = "创建时间")
     private Date createTime;
     @ApiModelProperty(notes = "更新时间")

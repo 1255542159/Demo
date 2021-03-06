@@ -19,18 +19,14 @@ public class ResponseVo{
 
     ResponseVo(ResponseStatus status){
         this.code = status.getCode();
-        this.msg = status.getMessage();
     }
+
     public static ResponseVo LOGIN_SUCCESS(){
-        ResponseVo responseVo = new ResponseVo(ResponseStatus.SUCCESS);
-        responseVo.setMsg("登录成功");
-        return responseVo;
+        return new ResponseVo(ResponseStatus.SUCCESS).setMsg("登录成功");
     }
 
     public static ResponseVo LOGIN_FAILURE(){
-        ResponseVo responseVo = new ResponseVo(ResponseStatus.FAILURE);
-        responseVo.setMsg("账号或密码错误");
-        return responseVo;
+        return new ResponseVo(ResponseStatus.SUCCESS).setMsg("账号或密码错误");
     }
 
     public static ResponseVo SUCCESS(){
@@ -49,7 +45,8 @@ public class ResponseVo{
         this.data = data;
         return this;
     }
-
-
-
+    public ResponseVo setMsg(String msg){
+        this.msg = msg;
+        return this;
+    }
 }

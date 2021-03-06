@@ -5,9 +5,8 @@ import com.example.demo.business.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +43,17 @@ public class UserController {
     @GetMapping("/getMenu")
     public ResponseVo getMenuList(HttpServletRequest request, HttpServletResponse response) {
         return userService.getMenuList(request, response);
+    }
+
+    /**
+     * 图片上传
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/uploadImage")
+    public ResponseVo uploadImage(@RequestParam("file") MultipartFile file) {
+        return userService.uploadImage(file);
     }
 
 

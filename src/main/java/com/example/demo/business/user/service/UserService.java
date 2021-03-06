@@ -1,8 +1,12 @@
 package com.example.demo.business.user.service;
 
+import com.example.demo.base.BaseService;
 import com.example.demo.base.ResponseVo;
+
+import com.example.demo.business.user.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  * @date 2020/12/28 11:54
  */
-public interface UserService extends UserDetailsService {
+public interface UserService extends UserDetailsService, BaseService<User> {
 
 
     /**
@@ -30,4 +34,11 @@ public interface UserService extends UserDetailsService {
      * @return
      */
     ResponseVo getMenuList(HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     *上传图片
+     * @param file
+     * @return
+     */
+    ResponseVo uploadImage(MultipartFile file);
 }
