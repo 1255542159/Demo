@@ -31,8 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomAuthorizationFilter();
     }
 
-
-
     /**
      * 角色继承
      *
@@ -86,7 +84,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
-                // 登录URL
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/club/**").hasRole("CLUB")
                 .antMatchers("/user/**").hasRole("USER")

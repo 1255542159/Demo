@@ -65,28 +65,6 @@ public class ClubController {
         return clubService.update(club);
     }
 
-    /**
-     * 人员列表
-     *
-     * @return
-     */
-    @GetMapping("/personnelList")
-    public ResponseVo personnelList(@RequestParam("page") int page,
-                                    @RequestParam("size") int size,
-                                    @RequestParam(value = "keyWords", required = false) String keyWords) {
-        return userService.getList(page, size, keyWords);
-    }
-
-    /**
-     * 根据人员id更新人员
-     *
-     * @param user
-     * @return
-     */
-    @PutMapping("/updatePersonnel")
-    public ResponseVo updatePersonnel(@RequestBody User user) {
-        return userService.update(user);
-    }
 
 
 }

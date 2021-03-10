@@ -19,9 +19,9 @@ import java.util.List;
 @ToString
 public class User implements UserDetails {
 
-    private Long id;
-    @ApiModelProperty(notes = "昵称")
-    private String nickName;
+    private String id;
+    @ApiModelProperty(notes = "学号")
+    private String sno;
     @ApiModelProperty(notes = "密码")
     private String password;
     @ApiModelProperty(notes = "姓名")
@@ -53,11 +53,11 @@ public class User implements UserDetails {
     @ApiModelProperty(notes = "角色")
     private Role roles;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

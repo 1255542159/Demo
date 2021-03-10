@@ -3,12 +3,14 @@ package com.example.demo.business.user.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.club.entity.Club;
+import com.example.demo.business.club.mapper.ClubMapper;
 import com.example.demo.business.user.entity.UserVo;
 import com.example.demo.business.user.service.UserService;
 import com.example.demo.business.user.entity.Menu;
 import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.utils.Constants;
+import com.example.demo.utils.SnowflakeIdWorker;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qiniu.common.Zone;
@@ -25,13 +27,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -45,6 +46,14 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private SnowflakeIdWorker idWorker;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private ClubMapper clubMapper;
+    @Autowired
+    private  HttpServletRequest request;
 
     /**
      * 设置好账号的ACCESS_KEY和SECRET_KEY
@@ -151,7 +160,6 @@ public class UserServiceImpl implements UserService {
             //图片格式正确
             //对图片重命名
             String fileName = System.currentTimeMillis() + "." + type;
-
             try {
                 //将图片上传到七牛云服务器
                 Response response = getUploadManager().put(file.getBytes(), fileName, getUpToken());
@@ -187,12 +195,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseVo save(User entity) {
-        return null;
+        entity.setCreateTime(new Date());
+        entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
+        entity.setId(String.valueOf(idWorker.nextId()));
+        entity.setRegIp(request.getRemoteAddr());
+        entity.setStatus(0);
+        int save = userMapper.save(entity);
+        if(save != 1) {
+            return ResponseVo.FAILURE();
+        }
+        return ResponseVo.SUCCESS();
     }
 
     @Override
     public ResponseVo remove(Integer id) {
-        return null;
+        int remove = userMapper.remove(id);
+        if(remove != 1){
+            return ResponseVo.FAILURE();
+        }
+        return ResponseVo.SUCCESS().setMsg("删除成功");
     }
 
     @Override
@@ -202,7 +223,7 @@ public class UserServiceImpl implements UserService {
             if(update != 1) {
                 return ResponseVo.FAILURE();
             }
-        return ResponseVo.SUCCESS();
+        return ResponseVo.SUCCESS().setMsg("更新成功");
     }
 
     @Override
@@ -210,12 +231,21 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User principal = (User) authentication.getPrincipal();
         PageHelper.startPage(page, size);
-        List<UserVo> all = userMapper.getListByClubId(principal.getId());
+        String userId = principal.getId();
+        Long clubId = Long.valueOf(principal.getClubId());
+        //如果是超级管理员，则可以查看全部的用户信息
+        if(principal.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)){
+            clubId = null;
+        }
+        //查询当前用户创建的社团下的成员列表
+        List<UserVo> all = userMapper.getListByClubId(userId,clubId);
+        //如果社团为空
         Iterator<UserVo> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            UserVo next = iterator.next();
-            if (next.getId().equals(principal.getId())) {
-                iterator.remove();
+        while (iterator.hasNext()){
+            UserVo userVo = iterator.next();
+            //如果用户无社团
+            if(userVo.getClub() == null){
+                userVo.setClub(new Club());
             }
         }
         PageInfo<UserVo> userPageInfo = new PageInfo<>(all);

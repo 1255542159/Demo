@@ -7,7 +7,7 @@
     <resultMap id="baseMap" type="com.example.demo.business.user.entity.User">
         <id column="ID" property="id"/>
         <result column="NAME" property="name"/>
-        <result column="NICK_NAME" property="nickName"/>
+        <result column="SNO" property="sno"/>
         <result column="PASSWORD" property="password"/>
         <result column="SEX" property="sex"/>
         <result column="AVATAR" property="avatar"/>
@@ -18,7 +18,6 @@
         <result column="REG_ID" property="regIp"/>
         <result column="LOGIN_IP" property="loginIp"/>
         <result column="CLUB_ID" property="clubId"/>
-        <result column="PARENT_ID" property="parentId"/>
         <result column="CREATE_TIME" property="createTime"/>
         <result column="UPDATE_TIME" property="updateTime"/>
         <!--关联查询-->
@@ -45,7 +44,7 @@
     <resultMap id="userMap" type="com.example.demo.business.user.entity.UserVo">
         <id column="ID" property="id"/>
         <result column="NAME" property="name"/>
-        <result column="NICK_NAME" property="nickName"/>
+        <result column="SNO" property="sno"/>
         <result column="PASSWORD" property="password"/>
         <result column="SEX" property="sex"/>
         <result column="AVATAR" property="avatar"/>
@@ -56,23 +55,54 @@
         <result column="REG_ID" property="regIp"/>
         <result column="LOGIN_IP" property="loginIp"/>
         <result column="CLUB_ID" property="clubId"/>
-        <result column="PARENT_ID" property="parentId"/>
         <result column="CREATE_TIME" property="createTime"/>
         <result column="UPDATE_TIME" property="updateTime"/>
         <!--关联查询-->
         <collection property="club" column="CLUB_ID" ofType="com.example.demo.business.club.entity.Club"
                     select="com.example.demo.business.club.mapper.ClubMapper.findClubById"/>
     </resultMap>
+    <insert id="save">
+        insert into `user`(
+        ID,`NAME`,SNO,PASSWORD,SEX,
+        AVATAR,PHONE,EMAIL,SIGN,STATUS,
+        REG_ID,LOGIN_IP,CLUB_ID,CREATE_TIME,UPDATE_TIME
+        )values (
+        #{id},#{name},#{sno},#{password},#{sex},
+        #{avatar},#{phone},#{email},#{sign},#{status},
+        #{regIp},#{loginIp},#{clubId},#{createTime},#{updateTime}
+        )
+    </insert>
     <update id="update" parameterType="com.example.demo.business.user.entity.User">
         update `user`
         set
+        <if test="name != null">
             `NAME` = #{name},
+        </if>
+        <if test="sno != null">
+            SNO = #{sno},
+        </if>
+        <if test="password != null">
+            PASSWORD = #{password},
+        </if>
+        <if test="sex != null">
             SEX = #{sex},
+        </if>
+        <if test="phone != null">
             PHONE = #{phone},
+        </if>
+        <if test="email != null">
             EMAIL = #{email},
+        </if>
+        <if test="status != null">
             STATUS = #{status},
+        </if>
+        <if test="clubId != null">
             CLUB_ID = #{clubId},
-            UPDATE_TIME = #{updateTime}
+        </if>
+        <if test="avatar != null">
+            AVATAR = #{avatar},
+        </if>
+        UPDATE_TIME = #{updateTime}
         where ID = #{id};
     </update>
 
@@ -98,8 +128,18 @@
 
     </select>
     <select id="getListByClubId" resultMap="userMap">
-        select *from `user`
-        where PARENT_ID = #{userId}
+        select
+        ID,`NAME`,SNO,SEX,
+        AVATAR,PHONE,EMAIL,SIGN,STATUS,
+        REG_ID,LOGIN_IP,CLUB_ID,CREATE_TIME,UPDATE_TIME,CLUB_ID
+        from `user`
+        where 1=1
+        <if test="clubId != null">
+            and CLUB_ID = #{clubId}
+        </if>
+        <if test="userId != null">
+            and id != #{userId}
+        </if>
     </select>
 
 

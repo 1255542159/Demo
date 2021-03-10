@@ -44,10 +44,10 @@ public interface UserMapper extends BaseMapper<User> {
 
     /**
      * 通过用户id查询负责人下所有人
-     * @param userId
+     * @param clubId
      * @return
      */
-    List<UserVo> getListByClubId(Long userId);
+    List<UserVo> getListByClubId(String userId,Long clubId);
 
     /**
      * 更新用户信息
@@ -56,4 +56,13 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Override
     int update(User entity);
+
+
+    /**
+     * 新增用户
+     * @param entity
+     * @return
+     */
+    @Override
+    int save(User entity);
 }

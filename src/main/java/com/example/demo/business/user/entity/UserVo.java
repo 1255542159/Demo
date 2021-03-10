@@ -15,9 +15,9 @@ import java.util.Date;
 @Data
 @ToString
 public class UserVo {
-    private Long id;
+    private String id;
     @ApiModelProperty(notes = "昵称")
-    private String nickName;
+    private String sno;
     @ApiModelProperty(notes = "密码")
     private String password;
     @ApiModelProperty(notes = "姓名")

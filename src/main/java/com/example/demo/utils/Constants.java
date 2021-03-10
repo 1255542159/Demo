@@ -10,4 +10,7 @@ public interface Constants {
         int DEFAULT_PAGE = 1;
         int MIN_SIZE = 5;
     }
+    interface Role {
+        String ROLE_ADMIN = "ROLE_ADMIN";
+    }
 }

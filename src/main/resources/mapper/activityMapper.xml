@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.activity.mapper.ActivityMapper">
+
+    <resultMap id="baseMap" type="com.example.demo.business.activity.entity.Activity">
+        <id column="ID" property="id"/>
+        <result column="TITLE" property="title"/>
+        <result column="SUMMARY" property="summary"/>
+        <result column="CONTENT" property="content"/>
+        <result column="START_TIME" property="startTime"/>
+        <result column="END_TIME" property="endTime"/>
+        <result column="SPONSOR_ID" property="sponsorId"/>
+        <result column="ACTIVITY_IMG" property="activityImg"/>
+        <result column="IS_DELETE" property="isDelete"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="STATUS" property="status"/>
+    </resultMap>
+    <insert id="save">
+        insert into activity(
+        ID
+        TITLE,
+        SUMMARY,
+        CONTENT,
+        START_TIME,
+        END_TIME,
+        SPONSOR_ID,
+        ACTIVITY_IMG,
+        IS_DELETE,
+        CREATE_TIME,
+        UPDATE_TIME,
+        STATUS
+        )
+        values (
+            #{id},
+            #{title},
+            #{content},
+            #{startTime},
+            #{endTime},
+            #{sponsorId},
+            #{activityImg},
+            #{isDelete},
+            #{createTime},
+            #{updateTime},
+            #{status})
+    </insert>
+
+<!--    <update id="updateActivity">-->
+<!--        update activity-->
+<!--        set-->
+<!--        activity_name = #{activityName},-->
+<!--        activity_desc = #{activityDesc},-->
+<!--        activity_content = #{activityContent},-->
+<!--        start_time = #{start_time},-->
+<!--        end_time = #{end_time},-->
+<!--        activity_creator = #{activityCreator},-->
+<!--        activity_img = #{activityImg},-->
+<!--        is_deleted = #{isDeleted},-->
+<!--        created_time = #{createdTime},-->
+<!--        updated_time = #{updatedTime}-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+    <delete id="remove">
+        delete from activity where ID = #{id}
+    </delete>
+
+<!--    <select id="getActivityList" resultType="cms.demo.pojo.Activity">-->
+<!--        select *from activity-->
+<!--        <if test="keyWords != null and keyWords != ''">-->
+<!--            where activity_name like CONCAT(CONCAT('%',#{keyWords}),'%')-->
+<!--        </if>-->
+<!--        <if test="size != 0">-->
+<!--            limit-->
+<!--            #{page},#{size};-->
+<!--        </if>-->
+<!--    </select>-->
+<!--    <select id="findAll" resultType="java.lang.Integer">-->
+<!--        select count(1) from activity where is_deleted = 0;-->
+<!--    </select>-->
+
+
+</mapper>

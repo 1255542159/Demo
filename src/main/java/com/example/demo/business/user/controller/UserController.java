@@ -1,6 +1,7 @@
 package com.example.demo.business.user.controller;
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -56,5 +57,42 @@ public class UserController {
         return userService.uploadImage(file);
     }
 
+    /**
+     * 人员列表
+     *
+     * @return
+     */
+    @GetMapping("/personnelList")
+    public ResponseVo personnelList(@RequestParam("page") int page,
+                                    @RequestParam("size") int size,
+                                    @RequestParam(value = "keyWords", required = false) String keyWords) {
+        return userService.getList(page, size, keyWords);
+    }
+
+    /**
+     * 添加人员
+     *
+     * @return
+     */
+    @PostMapping("/addPersonnel")
+    public ResponseVo addPersonnel(@RequestBody User user) {
+        return userService.save(user);
+    }
+
+    /**
+     * 根据人员id更新人员
+     *
+     * @param user
+     * @return
+     */
+    @PutMapping("/updatePersonnel")
+    public ResponseVo updatePersonnel(@RequestBody User user) {
+        return userService.update(user);
+    }
+
+    @DeleteMapping("/deletePersonnel/{userId}")
+    public ResponseVo deletePersonnel(@PathVariable("userId") Integer userId){
+        return userService.remove(userId);
+    }
 
 }
