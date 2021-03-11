@@ -1,9 +1,8 @@
-package com.example.demo.business.club.service;
+package com.example.demo.business.admin.service;
 
 
 import com.example.demo.base.BaseService;
-import com.example.demo.base.ResponseVo;
-import com.example.demo.business.club.entity.Club;
+import com.example.demo.business.admin.entity.Club;
 
 /**
  * @author joy

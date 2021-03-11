@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Data
 public class BaseEntity implements Serializable {
-    private long id;
+    private String id;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

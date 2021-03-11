@@ -1,6 +1,7 @@
 package com.example.demo.business.user.entity;
 
-import com.example.demo.business.club.entity.Club;
+
+import com.example.demo.business.admin.entity.Club;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;

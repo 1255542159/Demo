@@ -1,7 +1,8 @@
-package com.example.demo.business.activity.service;
+package com.example.demo.business.admin.service;
+
 
 import com.example.demo.base.BaseService;
-import com.example.demo.business.activity.entity.Activity;
+import com.example.demo.business.admin.entity.Activity;
 
 /**
  * @author joy

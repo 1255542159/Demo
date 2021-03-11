@@ -1,4 +1,4 @@
-package com.example.demo.business.club.entity;
+package com.example.demo.business.admin.entity;
 
 import lombok.Data;
 

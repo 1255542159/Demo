@@ -1,9 +1,8 @@
-package com.example.demo.business.club.contorller;
+package com.example.demo.business.admin.controller;
 
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.club.entity.Club;
-import com.example.demo.business.club.service.ClubService;
-import com.example.demo.business.user.entity.User;
+import com.example.demo.business.admin.entity.Club;
+import com.example.demo.business.admin.service.ClubService;
 import com.example.demo.business.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

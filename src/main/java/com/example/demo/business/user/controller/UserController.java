@@ -1,8 +1,10 @@
 package com.example.demo.business.user.controller;
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.service.UserService;
+import com.example.demo.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,8 +34,9 @@ public class UserController {
     @GetMapping("/userInfo")
     public ResponseVo getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-        return ResponseVo.SUCCESS().setData(principal);
+        User user = (User) authentication.getPrincipal();
+        user.setPassword("");
+        return ResponseVo.SUCCESS().setData(user);
     }
 
     /**
@@ -47,14 +50,29 @@ public class UserController {
     }
 
     /**
-     * 图片上传
+     * 用户头像上传
      *
      * @param file
      * @return
      */
-    @PostMapping("/uploadImage")
-    public ResponseVo uploadImage(@RequestParam("file") MultipartFile file) {
-        return userService.uploadImage(file);
+    @PostMapping("image/uploadImage")
+    public ResponseVo uploadImage(@RequestParam("file") MultipartFile file,
+    @RequestParam("original") String original) {
+        return userService.uploadImage(file,original);
+    }
+
+    /**
+     * 获取图片列表
+     * @param page
+     * @param size
+     * @param original
+     * @return
+     */
+    @GetMapping("/image/list")
+    public ResponseVo getImageList(@RequestParam("page") int page,
+                                  @RequestParam("size") int size,
+                                  @RequestParam(value = "original",required = false) String original) {
+        return userService.getImageList(page,size,original);
     }
 
     /**
@@ -90,6 +108,11 @@ public class UserController {
         return userService.update(user);
     }
 
+    /**
+     * 根据用户id删除用户
+     * @param userId
+     * @return
+     */
     @DeleteMapping("/deletePersonnel/{userId}")
     public ResponseVo deletePersonnel(@PathVariable("userId") Integer userId){
         return userService.remove(userId);

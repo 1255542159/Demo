@@ -1,12 +1,20 @@
-package com.example.demo.business.activity.service.impl;
+package com.example.demo.business.admin.service.impl;
 
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.activity.entity.Activity;
-import com.example.demo.business.activity.mapper.ActivityMapper;
-import com.example.demo.business.activity.service.ActivityService;
+
+import com.example.demo.business.admin.entity.Activity;
+import com.example.demo.business.admin.mapper.ActivityMapper;
+import com.example.demo.business.admin.service.ActivityService;
+import com.example.demo.business.user.entity.User;
+import com.example.demo.utils.Constants;
+import com.example.demo.utils.SnowflakeIdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * @author joy
@@ -18,9 +26,18 @@ import org.springframework.stereotype.Service;
 public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
+    @Autowired
+    SnowflakeIdWorker idWorker;
 
     @Override
     public ResponseVo save(Activity entity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        entity.setId(String.valueOf(idWorker.nextId()));
+        entity.setSponsorId(user.getId());
+        entity.setCreateTime(new Date());
+        entity.setIsDelete(0);
+        entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
         int save = activityMapper.save(entity);
         if(save != 1){
             return ResponseVo.FAILURE();

@@ -1,7 +1,8 @@
-package com.example.demo.business.club.mapper;
+package com.example.demo.business.admin.mapper;
+
 
 import com.example.demo.base.BaseMapper;
-import com.example.demo.business.club.entity.Club;
+import com.example.demo.business.admin.entity.Club;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

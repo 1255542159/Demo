@@ -3,6 +3,7 @@ package com.example.demo.business.user.service;
 import com.example.demo.base.BaseService;
 import com.example.demo.base.ResponseVo;
 
+import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,5 +41,14 @@ public interface UserService extends UserDetailsService, BaseService<User> {
      * @param file
      * @return
      */
-    ResponseVo uploadImage(MultipartFile file);
+    ResponseVo uploadImage(MultipartFile file, String original);
+
+    /**
+     * 分页获取图片列表
+     * @param page
+     * @param size
+     * @param original
+     * @return
+     */
+    ResponseVo getImageList(int page, int size, String original);
 }

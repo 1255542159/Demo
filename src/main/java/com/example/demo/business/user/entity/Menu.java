@@ -17,9 +17,9 @@ public class Menu extends BaseEntity {
   private String component;
   private String name;
   private String icon;
-  private long keepAlive;
-  private long requireAuth;
-  private long parentId;
-  private long menuLevel;
+  private Integer keepAlive;
+  private Integer requireAuth;
+  private String parentId;
+  private Integer menuLevel;
   private List<Menu> childMenu;
 }

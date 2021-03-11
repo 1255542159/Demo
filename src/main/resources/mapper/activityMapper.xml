@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.demo.business.activity.mapper.ActivityMapper">
+<mapper namespace="com.example.demo.business.admin.mapper.ActivityMapper">
 
-    <resultMap id="baseMap" type="com.example.demo.business.activity.entity.Activity">
+    <resultMap id="baseMap" type="com.example.demo.business.admin.entity.Activity">
         <id column="ID" property="id"/>
         <result column="TITLE" property="title"/>
         <result column="SUMMARY" property="summary"/>
@@ -18,9 +18,9 @@
         <result column="UPDATE_TIME" property="updateTime"/>
         <result column="STATUS" property="status"/>
     </resultMap>
-    <insert id="save">
+    <insert id="save" parameterType="com.example.demo.business.admin.entity.Activity">
         insert into activity(
-        ID
+        ID,
         TITLE,
         SUMMARY,
         CONTENT,
@@ -31,11 +31,13 @@
         IS_DELETE,
         CREATE_TIME,
         UPDATE_TIME,
-        STATUS
+        STATUS,
+        CLUB_ID
         )
         values (
             #{id},
             #{title},
+            #{summary},
             #{content},
             #{startTime},
             #{endTime},
@@ -44,7 +46,8 @@
             #{isDelete},
             #{createTime},
             #{updateTime},
-            #{status})
+            #{status},
+            #{clubId})
     </insert>
 
 <!--    <update id="updateActivity">-->

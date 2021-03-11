@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.demo.business.club.mapper.ClubMapper">
+<mapper namespace="com.example.demo.business.admin.mapper.ClubMapper">
 
-    <resultMap id="baseMap" type="com.example.demo.business.club.entity.Club">
+    <resultMap id="baseMap" type="com.example.demo.business.admin.entity.Club">
         <id property="id" column="ID"/>
         <result property="clubName" column="CLUB_NAME"/>
         <result property="clubCreator" column="CLUB_CREATOR"/>
@@ -18,7 +18,7 @@
         <result property="amount" column="AMOUNT"/>
 
     </resultMap>
-    <insert id="save" parameterType="com.example.demo.business.club.entity.Club">
+    <insert id="save" parameterType="com.example.demo.business.admin.entity.Club">
     insert into
         club(
        CLUB_NAME,

@@ -1,14 +1,13 @@
-package com.example.demo.business.club.service.impl;
+package com.example.demo.business.admin.service.impl;
 
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.club.entity.Club;
-import com.example.demo.business.club.mapper.ClubMapper;
-import com.example.demo.business.club.service.ClubService;
+import com.example.demo.business.admin.entity.Club;
+import com.example.demo.business.admin.mapper.ClubMapper;
+import com.example.demo.business.admin.service.ClubService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 

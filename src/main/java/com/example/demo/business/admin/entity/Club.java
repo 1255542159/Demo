@@ -1,4 +1,4 @@
-package com.example.demo.business.club.entity;
+package com.example.demo.business.admin.entity;
 
 import com.example.demo.base.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,4 +1,4 @@
-package com.example.demo.business.activity.entity;
+package com.example.demo.business.admin.entity;
 
 import com.example.demo.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,8 +28,10 @@ public class Activity extends BaseEntity {
     @ApiModelProperty(notes = "活动首图")
     private String activityImg;
     @ApiModelProperty(notes = "是否删除 0：正常1：停用")
-    private long isDelete;
-    @ApiModelProperty(notes = "状态0：未审核，1：已审核，2：审核中")
+    private Integer isDelete;
+    @ApiModelProperty(notes = "状态0：待审核，1：审核通过，2：已退回")
     private Integer status;
+    @ApiModelProperty(notes = "社团ID")
+    private Integer clubId;
 
 }

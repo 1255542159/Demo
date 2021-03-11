@@ -1,8 +1,8 @@
-package com.example.demo.business.activity.controller;
+package com.example.demo.business.admin.controller;
 
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.activity.entity.Activity;
-import com.example.demo.business.activity.service.ActivityService;
+import com.example.demo.business.admin.entity.Activity;
+import com.example.demo.business.admin.service.ActivityService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(value = "活动管理中心",tags = "活动管理中心")
 @RequestMapping("/user")
-public class ActivityController{
+public class ActivityController {
     
     @Autowired
     private ActivityService activityService;

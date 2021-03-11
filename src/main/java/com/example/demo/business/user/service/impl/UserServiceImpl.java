@@ -2,9 +2,11 @@ package com.example.demo.business.user.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.club.entity.Club;
-import com.example.demo.business.club.mapper.ClubMapper;
+import com.example.demo.business.admin.entity.Club;
+import com.example.demo.business.admin.mapper.ClubMapper;
+import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.entity.UserVo;
+import com.example.demo.business.user.mapper.ImageMapper;
 import com.example.demo.business.user.service.UserService;
 import com.example.demo.business.user.entity.Menu;
 import com.example.demo.business.user.entity.User;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -51,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    private ClubMapper clubMapper;
+    private ImageMapper imageMapper;
     @Autowired
     private  HttpServletRequest request;
 
@@ -120,7 +123,7 @@ public class UserServiceImpl implements UserService {
         List<Menu> data = new ArrayList<>();
         for (Menu menu : menuList) {
             //找到父级id
-            if (menu.getParentId() == new Long(0)) {
+            if (menu.getParentId().equals("0")) {
                 data.add(menu);
             }
         }
@@ -132,7 +135,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseVo uploadImage(MultipartFile file) {
+    public ResponseVo uploadImage(MultipartFile file,String original) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User principal = (User) authentication.getPrincipal();
         /**
          * 1.校验file是否存在
          * 2.校验图片格式 jpg,png,gif,psd
@@ -168,33 +173,58 @@ public class UserServiceImpl implements UserService {
                     //表示上传成功
                     //获取七牛云图片地址
                     Object key = JSONObject.parseObject(response.bodyString()).get("key");
+                    String url = "http://" + QINIU_IMAGE_DOMAIN + "/" + key;
+                    //存入数据库
+                    //补全数据
+                    Image image = new Image();
+                    image.setOriginal(original);
+                    image.setId(String.valueOf(idWorker.nextId()));
+                    image.setUserId(principal.getId());
+                    image.setUrl(url);
+                    image.setStatus(0);
+                    image.setCreateTime(new Date());
+                    int save = imageMapper.save(image);
                     //将图片地址返回
-                    return ResponseVo.SUCCESS().setMsg("上传成功").setData("http://" + QINIU_IMAGE_DOMAIN + "/" + key);
+                    return ResponseVo.SUCCESS().setMsg("上传成功").setData(url);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-
-            return ResponseVo.FAILURE().setMsg("请上传【jpg,png,gif,psd】类型的图片！");
         }
-        return null;
+            return ResponseVo.FAILURE().setMsg("请上传【jpg,png,gif,psd】类型的图片！");
     }
 
-    private List<Menu> getChild(long id, List<Menu> menuList) {
+    @Override
+    public ResponseVo getImageList(int page, int size, String original) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User principal = (User) authentication.getPrincipal();
+            PageHelper.startPage(page, size);
+            List<Image> imageList = userMapper.getImageList(principal.getId(),original);
+            PageInfo<Image> imagePageInfo = new PageInfo<>(imageList);
+            return ResponseVo.SUCCESS().setData(imagePageInfo);
+        }catch (Exception e){
+            return ResponseVo.FAILURE().setMsg("获取失败");
+        }
+
+    }
+
+    private List<Menu> getChild(String id, List<Menu> menuList) {
         //子菜单
         List<Menu> childMenu = new ArrayList<>();
         for (Menu menu : menuList) {
-            if (menu.getParentId() == id) {
+            if (menu.getParentId().equals(id)) {
                 childMenu.add(menu);
             }
         }
         return childMenu;
     }
 
-
     @Override
     public ResponseVo save(User entity) {
+        if(entity.getAvatar() == null){
+            entity.setAvatar(Constants.DEFAULT.AVATAR);
+        }
         entity.setCreateTime(new Date());
         entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
         entity.setId(String.valueOf(idWorker.nextId()));
@@ -202,9 +232,9 @@ public class UserServiceImpl implements UserService {
         entity.setStatus(0);
         int save = userMapper.save(entity);
         if(save != 1) {
-            return ResponseVo.FAILURE();
+            return ResponseVo.FAILURE().setMsg("添加失败");
         }
-        return ResponseVo.SUCCESS();
+        return ResponseVo.SUCCESS().setMsg("添加成功");
     }
 
     @Override
