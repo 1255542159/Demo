@@ -23,7 +23,7 @@ public class Club extends BaseEntity {
     @ApiModelProperty(notes = "社团大图")
     private String clubImg;
     @ApiModelProperty(notes = "是否启用")
-    private long isDelete;
+    private Integer isDelete;
     @ApiModelProperty(notes = "社团人数")
-    private long amount;
+    private Integer amount;
 }

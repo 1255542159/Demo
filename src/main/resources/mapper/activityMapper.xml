@@ -50,39 +50,35 @@
             #{clubId})
     </insert>
 
-<!--    <update id="updateActivity">-->
-<!--        update activity-->
-<!--        set-->
-<!--        activity_name = #{activityName},-->
-<!--        activity_desc = #{activityDesc},-->
-<!--        activity_content = #{activityContent},-->
-<!--        start_time = #{start_time},-->
-<!--        end_time = #{end_time},-->
-<!--        activity_creator = #{activityCreator},-->
-<!--        activity_img = #{activityImg},-->
-<!--        is_deleted = #{isDeleted},-->
-<!--        created_time = #{createdTime},-->
-<!--        updated_time = #{updatedTime}-->
-<!--        where id = #{id}-->
-<!--    </update>-->
+    <!--    <update id="updateActivity">-->
+    <!--        update activity-->
+    <!--        set-->
+    <!--        activity_name = #{activityName},-->
+    <!--        activity_desc = #{activityDesc},-->
+    <!--        activity_content = #{activityContent},-->
+    <!--        start_time = #{start_time},-->
+    <!--        end_time = #{end_time},-->
+    <!--        activity_creator = #{activityCreator},-->
+    <!--        activity_img = #{activityImg},-->
+    <!--        is_deleted = #{isDeleted},-->
+    <!--        created_time = #{createdTime},-->
+    <!--        updated_time = #{updatedTime}-->
+    <!--        where id = #{id}-->
+    <!--    </update>-->
 
     <delete id="remove">
         delete from activity where ID = #{id}
     </delete>
+    <select id="getActivityList" resultType="com.example.demo.business.admin.entity.Activity">
+        select *from  `activity` where IS_DELETE = 0
+        <if test="clubId != null">
+            and CLUB_ID = #{clubId}
+        </if>
+        <if test="sponsorId != null">
+            and SPONSOR_ID = #{sponsorId}
+        </if>
+    </select>
 
-<!--    <select id="getActivityList" resultType="cms.demo.pojo.Activity">-->
-<!--        select *from activity-->
-<!--        <if test="keyWords != null and keyWords != ''">-->
-<!--            where activity_name like CONCAT(CONCAT('%',#{keyWords}),'%')-->
-<!--        </if>-->
-<!--        <if test="size != 0">-->
-<!--            limit-->
-<!--            #{page},#{size};-->
-<!--        </if>-->
-<!--    </select>-->
-<!--    <select id="findAll" resultType="java.lang.Integer">-->
-<!--        select count(1) from activity where is_deleted = 0;-->
-<!--    </select>-->
 
 
 </mapper>

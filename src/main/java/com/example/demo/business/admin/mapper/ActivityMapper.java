@@ -6,6 +6,8 @@ import com.example.demo.business.admin.entity.Activity;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author joy
  * @version 1.0
@@ -30,4 +32,10 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      */
     @Override
     int remove(Integer id);
+
+    /**
+     * 获取所有的活动
+     * @return
+     */
+    List<Activity> getActivityList(String clubId,String sponsorId);
 }

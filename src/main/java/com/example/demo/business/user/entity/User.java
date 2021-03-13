@@ -43,9 +43,9 @@ public class User implements UserDetails {
     @ApiModelProperty(notes = "登录IP")
     private String loginIp;
     @ApiModelProperty(notes = "社团ID")
-    private Integer clubId;
+    private String clubId;
     @ApiModelProperty(notes = "负责人ID")
-    private Integer parentId;
+    private String parentId;
     @ApiModelProperty(notes = "创建时间")
     private Date createTime;
     @ApiModelProperty(notes = "更新时间")

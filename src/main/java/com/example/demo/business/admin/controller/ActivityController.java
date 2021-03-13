@@ -5,10 +5,7 @@ import com.example.demo.business.admin.entity.Activity;
 import com.example.demo.business.admin.service.ActivityService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author joy
@@ -26,5 +23,13 @@ public class ActivityController {
     @PostMapping("/post/activity")
     public ResponseVo postActivity(@RequestBody Activity activity){
         return activityService.save(activity);
+    }
+
+
+    @GetMapping("/list/activity")
+    public ResponseVo listActivity(@RequestParam("page") int page,
+                                   @RequestParam("size") int size,
+                                   @RequestParam(value = "keyWords", required = false) String keyWords){
+        return activityService.getList(page,size,keyWords);
     }
 }

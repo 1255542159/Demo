@@ -11,7 +11,7 @@ public class Role extends BaseEntity {
 
   private String roleName;
   private String roleDesc;
-  private long status;
-  private long isDelete;
+  private Integer status;
+  private Integer isDelete;
 
 }

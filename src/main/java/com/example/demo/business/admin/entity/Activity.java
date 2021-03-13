@@ -32,6 +32,6 @@ public class Activity extends BaseEntity {
     @ApiModelProperty(notes = "状态0：待审核，1：审核通过，2：已退回")
     private Integer status;
     @ApiModelProperty(notes = "社团ID")
-    private Integer clubId;
+    private String clubId;
 
 }
