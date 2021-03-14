@@ -43,7 +43,7 @@ public interface BaseMapper<T> {
 
     /**
      * 查询所有
-     * @return
+     * @returnpersonnelList
      */
     List<T> findAll();
 }

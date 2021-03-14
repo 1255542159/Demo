@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.List;
 
@@ -39,9 +40,8 @@ public class ActivityServiceImpl implements ActivityService {
         entity.setSponsorId(user.getId());
         entity.setCreateTime(new Date());
         entity.setIsDelete(0);
-        entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
         int save = activityMapper.save(entity);
-        if(save != 1){
+        if (save != 1) {
             return ResponseVo.FAILURE();
         }
         return ResponseVo.SUCCESS().setMsg("发布成功");
@@ -50,7 +50,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ResponseVo remove(Integer id) {
         int remove = activityMapper.remove(id);
-        if(remove != 1){
+        if (remove != 1) {
             return ResponseVo.FAILURE();
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
@@ -62,24 +62,24 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public ResponseVo getList(int page, int size, String keyWords) {
+    public ResponseVo getList(int page, int size, int status, String keyWords) {
         try {
             User currentUser = Tools.getCurrentUser();
             PageHelper.startPage(page, size);
             List<Activity> all = null;
-            if (currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)){
+            if (currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)) {
                 //如果是超级管理员，则查看所有
-                all = activityMapper.getActivityList(null,null);
-            }else if(currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_CLUB)){
+                all = activityMapper.getActivityList(null, null, status);
+            } else if (currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_CLUB)) {
                 //如果是社团管理员 查看当前社团下的所有活动申请
-                    all = activityMapper.getActivityList(currentUser.getClubId(),null);
-            }else {
+                all = activityMapper.getActivityList(currentUser.getClubId(), null, status);
+            } else {
                 //如果是普通用户 查看自己提交的活动
-                all = activityMapper.getActivityList(null,currentUser.getId());
+                all = activityMapper.getActivityList(null, currentUser.getId(), status);
             }
             PageInfo<Activity> activityPageInfo = new PageInfo<>(all);
             return ResponseVo.SUCCESS().setData(activityPageInfo);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseVo.FAILURE().setMsg("获取失败");
         }
     }

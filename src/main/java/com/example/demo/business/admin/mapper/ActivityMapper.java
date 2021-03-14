@@ -37,5 +37,5 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * 获取所有的活动
      * @return
      */
-    List<Activity> getActivityList(String clubId,String sponsorId);
+    List<Activity> getActivityList(String clubId,String sponsorId,int status);
 }

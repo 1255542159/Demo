@@ -69,16 +69,18 @@
     <delete id="remove">
         delete from activity where ID = #{id}
     </delete>
-    <select id="getActivityList" resultType="com.example.demo.business.admin.entity.Activity">
-        select *from  `activity` where IS_DELETE = 0
+    <select id="getActivityList" resultMap="baseMap">
+        select *from `activity` where IS_DELETE = 0
         <if test="clubId != null">
             and CLUB_ID = #{clubId}
         </if>
         <if test="sponsorId != null">
             and SPONSOR_ID = #{sponsorId}
         </if>
+        <if test="status != 0">
+            and STATUS = #{status}
+        </if>
     </select>
-
 
 
 </mapper>

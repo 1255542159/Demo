@@ -80,11 +80,12 @@ public class UserController {
      *
      * @return
      */
-    @GetMapping("/personnelList")
-    public ResponseVo personnelList(@RequestParam("page") int page,
-                                    @RequestParam("size") int size,
+    @GetMapping("/personnelList/{page}/{size}")
+    public ResponseVo personnelList(@RequestParam(value = "page", defaultValue = "1",required = false) int page,
+                                    @RequestParam(value = "size", defaultValue = "5",required = false) int size,
+                                    @RequestParam(value = "status",required = false) Integer status,
                                     @RequestParam(value = "keyWords", required = false) String keyWords) {
-        return userService.getList(page, size, keyWords);
+        return userService.getList(page, size, status,keyWords);
     }
 
     /**

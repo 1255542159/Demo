@@ -26,10 +26,11 @@ public class ActivityController {
     }
 
 
-    @GetMapping("/list/activity")
-    public ResponseVo listActivity(@RequestParam("page") int page,
-                                   @RequestParam("size") int size,
+    @GetMapping("/list/activity/{page}/{size}")
+    public ResponseVo listActivity(@PathVariable(value = "page",required = false) int page,
+                                   @PathVariable(value = "size",required = false) int size,
+                                   @RequestParam(value = "status",required = false) Integer status,
                                    @RequestParam(value = "keyWords", required = false) String keyWords){
-        return activityService.getList(page,size,keyWords);
+        return activityService.getList(page,size,status,keyWords);
     }
 }

@@ -3,7 +3,6 @@ package com.example.demo.business.user.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.entity.Club;
-import com.example.demo.business.admin.mapper.ClubMapper;
 import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.entity.UserVo;
 import com.example.demo.business.user.mapper.ImageMapper;
@@ -32,10 +31,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ImageMapper imageMapper;
     @Autowired
-    private  HttpServletRequest request;
+    private HttpServletRequest request;
 
     /**
      * 设置好账号的ACCESS_KEY和SECRET_KEY
@@ -135,7 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseVo uploadImage(MultipartFile file,String original) {
+    public ResponseVo uploadImage(MultipartFile file, String original) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User principal = (User) authentication.getPrincipal();
         /**
@@ -191,7 +190,7 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
         }
-            return ResponseVo.FAILURE().setMsg("请上传【jpg,png,gif,psd】类型的图片！");
+        return ResponseVo.FAILURE().setMsg("请上传【jpg,png,gif,psd】类型的图片！");
     }
 
     @Override
@@ -200,10 +199,10 @@ public class UserServiceImpl implements UserService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User principal = (User) authentication.getPrincipal();
             PageHelper.startPage(page, size);
-            List<Image> imageList = userMapper.getImageList(principal.getId(),original);
+            List<Image> imageList = userMapper.getImageList(principal.getId(), original);
             PageInfo<Image> imagePageInfo = new PageInfo<>(imageList);
             return ResponseVo.SUCCESS().setData(imagePageInfo);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseVo.FAILURE().setMsg("获取失败");
         }
 
@@ -222,7 +221,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseVo save(User entity) {
-        if(entity.getAvatar() == null){
+        if (entity.getAvatar() == null) {
             entity.setAvatar(Constants.DEFAULT.AVATAR);
         }
         entity.setCreateTime(new Date());
@@ -231,7 +230,7 @@ public class UserServiceImpl implements UserService {
         entity.setRegIp(request.getRemoteAddr());
         entity.setStatus(0);
         int save = userMapper.save(entity);
-        if(save != 1) {
+        if (save != 1) {
             return ResponseVo.FAILURE().setMsg("添加失败");
         }
         return ResponseVo.SUCCESS().setMsg("添加成功");
@@ -240,7 +239,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseVo remove(Integer id) {
         int remove = userMapper.remove(id);
-        if(remove != 1){
+        if (remove != 1) {
             return ResponseVo.FAILURE();
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
@@ -249,32 +248,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseVo update(User entity) {
         entity.setUpdateTime(new Date());
-            int update = userMapper.update(entity);
-            if(update != 1) {
-                return ResponseVo.FAILURE();
-            }
+        int update = userMapper.update(entity);
+        if (update != 1) {
+            return ResponseVo.FAILURE();
+        }
         return ResponseVo.SUCCESS().setMsg("更新成功");
     }
 
     @Override
-    public ResponseVo getList(int page, int size, String keyWords) {
+    public ResponseVo getList(int page, int size, int status, String keyWords) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User principal = (User) authentication.getPrincipal();
         PageHelper.startPage(page, size);
         String userId = principal.getId();
         Long clubId = Long.valueOf(principal.getClubId());
         //如果是超级管理员，则可以查看全部的用户信息
-        if(principal.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)){
+        if (principal.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)) {
             clubId = null;
         }
         //查询当前用户创建的社团下的成员列表
-        List<UserVo> all = userMapper.getListByClubId(userId,clubId);
+        List<UserVo> all = userMapper.getListByClubId(userId, clubId);
         //如果社团为空
         Iterator<UserVo> iterator = all.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             UserVo userVo = iterator.next();
             //如果用户无社团
-            if(userVo.getClub() == null){
+            if (userVo.getClub() == null) {
                 userVo.setClub(new Club());
             }
         }

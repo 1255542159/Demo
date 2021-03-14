@@ -29,7 +29,7 @@ public class Activity extends BaseEntity {
     private String activityImg;
     @ApiModelProperty(notes = "是否删除 0：正常1：停用")
     private Integer isDelete;
-    @ApiModelProperty(notes = "状态0：待审核，1：审核通过，2：已退回")
+    @ApiModelProperty(notes = "0表示全部，1表示已通过，2审核中，3已拒绝")
     private Integer status;
     @ApiModelProperty(notes = "社团ID")
     private String clubId;

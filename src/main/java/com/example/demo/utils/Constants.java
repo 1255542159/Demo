@@ -9,6 +9,7 @@ public interface Constants {
     interface DEFAULT {
         String AVATAR = "https://imgs.sunofbeaches.com/group1/M00/00/07/rBsADV22ZymAV8BwAABVL9XtNSU926.png";
     }
+
     interface Page {
         int DEFAULT_PAGE = 1;
         int MIN_SIZE = 5;
@@ -27,9 +28,10 @@ public interface Constants {
      * 活动状态
      */
     interface ActivityStatus {
-        int TO_AUDIT = 0; //待审核
+        //0表示全部，1表示已通过，2审核中，3已拒绝
+        int TO_AUDIT = 2; //待审核
         int PASSED = 1;   //审核通过
-        int UNAPPROVE = 2;//审核未通过
+        int UNAPPROVE = 3;//审核未通过
     }
 
     /**

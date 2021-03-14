@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class ClubServiceImpl implements ClubService {
     private ClubMapper clubMapper;
 
     @Override
-    public ResponseVo getList(int page, int size, String keyWords) {
-        PageHelper.startPage(page,size);
+    public ResponseVo getList(int page, int size, int status, String keyWords) {
+        PageHelper.startPage(page, size);
         List<Club> all = clubMapper.findAll();
         PageInfo<Club> clubPageInfo = new PageInfo<>(all);
         return ResponseVo.SUCCESS().setData(clubPageInfo);
@@ -35,7 +36,7 @@ public class ClubServiceImpl implements ClubService {
     public ResponseVo save(Club entity) {
         entity.setCreateTime(new Date());
         int save = clubMapper.save(entity);
-        if(save != 1){
+        if (save != 1) {
             return ResponseVo.FAILURE().setMsg("保存失败");
         }
         return ResponseVo.SUCCESS().setMsg("保存成功");
@@ -44,7 +45,7 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public ResponseVo remove(Integer id) {
         int remove = clubMapper.remove(id);
-        if(remove != 1){
+        if (remove != 1) {
             return ResponseVo.FAILURE().setMsg("删除失败");
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
@@ -54,7 +55,7 @@ public class ClubServiceImpl implements ClubService {
     public ResponseVo update(Club entity) {
         entity.setUpdateTime(new Date());
         int update = clubMapper.update(entity);
-        if(update != 1){
+        if (update != 1) {
             return ResponseVo.FAILURE().setMsg("更新失败");
         }
         return ResponseVo.SUCCESS().setMsg("更新成功");

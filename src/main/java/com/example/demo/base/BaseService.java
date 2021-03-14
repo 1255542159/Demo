@@ -38,7 +38,5 @@ public interface BaseService<T> {
      * @param keyWords
      * @return
      */
-    ResponseVo getList(int page,int size, String keyWords);
-
-
+    ResponseVo getList(int page,int size, int status,String keyWords);
 }

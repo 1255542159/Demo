@@ -36,11 +36,12 @@ public class ClubController {
      * 社团列表
      * @return
      */
-    @GetMapping("/clubList")
+    @GetMapping("/clubList/{page}/{size}")
     public ResponseVo getClubList(@RequestParam(value = "page", defaultValue = "1",required = false) int page,
                                   @RequestParam(value = "size", defaultValue = "5",required = false) int size,
+                                  @RequestParam(value = "status",required = false) Integer status,
                                   @RequestParam(value = "keyWords",required = false) String keyWords ){
-        return clubService.getList(page,size,keyWords);
+        return clubService.getList(page,size,status,keyWords);
     }
 
     /**
