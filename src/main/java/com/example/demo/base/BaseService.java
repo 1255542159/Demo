@@ -22,7 +22,7 @@ public interface BaseService<T> {
      * @param id
      * @return
      */
-    ResponseVo remove(Integer id);
+    ResponseVo remove(String id);
 
     /**
      * 更新

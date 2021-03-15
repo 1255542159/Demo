@@ -6,6 +6,8 @@ import com.example.demo.business.admin.entity.Club;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author joy
  * @version 1.0
@@ -29,7 +31,7 @@ public interface ClubMapper extends BaseMapper<Club> {
      * @return
      */
     @Override
-    int remove(Integer id);
+    int remove(String id);
 
     /**
      * 更新社团
@@ -45,4 +47,11 @@ public interface ClubMapper extends BaseMapper<Club> {
      * @return
      */
     Club findClubById(Integer clubId);
+
+    /**
+     * 查询所有社团
+     * @return
+     */
+    @Override
+    List<Club> findAll();
 }

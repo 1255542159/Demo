@@ -81,8 +81,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/personnelList/{page}/{size}")
-    public ResponseVo personnelList(@RequestParam(value = "page", defaultValue = "1",required = false) int page,
-                                    @RequestParam(value = "size", defaultValue = "5",required = false) int size,
+    public ResponseVo personnelList(@PathVariable(value = "page", required = false) int page,
+                                    @PathVariable(value = "size", required = false) int size,
                                     @RequestParam(value = "status",required = false) Integer status,
                                     @RequestParam(value = "keyWords", required = false) String keyWords) {
         return userService.getList(page, size, status,keyWords);
@@ -115,7 +115,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/deletePersonnel/{userId}")
-    public ResponseVo deletePersonnel(@PathVariable("userId") Integer userId){
+    public ResponseVo deletePersonnel(@PathVariable("userId") String userId){
         return userService.remove(userId);
     }
 

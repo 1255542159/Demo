@@ -33,4 +33,10 @@ public class ActivityController {
                                    @RequestParam(value = "keyWords", required = false) String keyWords){
         return activityService.getList(page,size,status,keyWords);
     }
+
+
+    @DeleteMapping("delete/activity/{id}")
+    public ResponseVo delete(@PathVariable("id") String id){
+        return activityService.remove(id);
+    }
 }

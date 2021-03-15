@@ -25,7 +25,7 @@ public interface BaseMapper<T> {
      * @param id
      * @return
      */
-    int remove(Integer id);
+    int remove(String id);
 
     /**
      * 更新

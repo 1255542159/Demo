@@ -76,7 +76,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     @Override
-    int remove(Integer id);
+    int remove(String id);
 
     /**
      * 查询图片列表

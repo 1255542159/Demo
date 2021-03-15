@@ -69,6 +69,7 @@ from club c
 left join  (select count(1) as AMOUNT,CLUB_ID from user where status =0 GROUP BY CLUB_ID) u
 on u.CLUB_ID = c.id
 GROUP BY c.id
+ORDER BY c.CREATE_TIME asc
     </select>
 
     <select id="findClubById" resultMap="baseMap">

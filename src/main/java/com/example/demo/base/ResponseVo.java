@@ -17,6 +17,7 @@ public class ResponseVo{
     private String msg;
     private Object data;
 
+
     ResponseVo(ResponseStatus status){
         this.code = status.getCode();
     }

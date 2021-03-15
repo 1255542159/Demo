@@ -19,9 +19,9 @@ public class Activity extends BaseEntity {
     private String summary;
     @ApiModelProperty(notes = "活动内容")
     private String content;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date startTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date endTime;
     @ApiModelProperty(notes = "发起人ID")
     private String sponsorId;
@@ -33,5 +33,8 @@ public class Activity extends BaseEntity {
     private Integer status;
     @ApiModelProperty(notes = "社团ID")
     private String clubId;
-
+    @ApiModelProperty(notes = "参数数")
+    private Integer viewCount;
+    @ApiModelProperty(notes = "参与人数")
+    private Integer joinCount;
 }

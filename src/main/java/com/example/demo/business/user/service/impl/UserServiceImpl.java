@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseVo remove(Integer id) {
+    public ResponseVo remove(String id) {
         int remove = userMapper.remove(id);
         if (remove != 1) {
             return ResponseVo.FAILURE();

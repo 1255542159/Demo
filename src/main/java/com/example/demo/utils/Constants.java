@@ -29,7 +29,7 @@ public interface Constants {
      */
     interface ActivityStatus {
         //0表示全部，1表示已通过，2审核中，3已拒绝
-        int TO_AUDIT = 2; //待审核
+        int TO_AUDIT = 2; //审核中
         int PASSED = 1;   //审核通过
         int UNAPPROVE = 3;//审核未通过
     }

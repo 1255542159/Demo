@@ -17,6 +17,10 @@
         <result column="CREATE_TIME" property="createTime"/>
         <result column="UPDATE_TIME" property="updateTime"/>
         <result column="STATUS" property="status"/>
+        <result column="VIEW_COUNT" property="viewCount"/>
+        <result column="JOIN_COUNT" property="joinCount"/>
+        <result column="CLUB_ID" property="clubId"/>
+
     </resultMap>
     <insert id="save" parameterType="com.example.demo.business.admin.entity.Activity">
         insert into activity(
@@ -32,7 +36,9 @@
         CREATE_TIME,
         UPDATE_TIME,
         STATUS,
-        CLUB_ID
+        CLUB_ID,
+        VIEW_COUNT,
+        JOUN_COUNT
         )
         values (
             #{id},
@@ -47,24 +53,30 @@
             #{createTime},
             #{updateTime},
             #{status},
-            #{clubId})
+            #{clubId},
+            #{viewCount},
+            #{joinCount})
     </insert>
 
-    <!--    <update id="updateActivity">-->
-    <!--        update activity-->
-    <!--        set-->
-    <!--        activity_name = #{activityName},-->
-    <!--        activity_desc = #{activityDesc},-->
-    <!--        activity_content = #{activityContent},-->
-    <!--        start_time = #{start_time},-->
-    <!--        end_time = #{end_time},-->
-    <!--        activity_creator = #{activityCreator},-->
-    <!--        activity_img = #{activityImg},-->
-    <!--        is_deleted = #{isDeleted},-->
-    <!--        created_time = #{createdTime},-->
-    <!--        updated_time = #{updatedTime}-->
-    <!--        where id = #{id}-->
-    <!--    </update>-->
+        <update id="update">
+            update activity
+            set
+            TITLE = #{title},
+            SUMMARY = #{summary},
+            CONTENT = #{content},
+            START_TIME = #{startTime},
+            END_TIME = #{endTime},
+            SPONSOR_ID = #{sponsorId},
+            ACTIVITY_IMG = #{activityImg},
+            IS_DELETE = #{isDelete},
+            CREATE_TIME = #{createTime},
+            UPDATE_TIME = #{updateTime},
+            STATUS = #{status},
+            CLUB_ID = #{clubId},
+            VIEW_COUNT = #{viewCount},
+            JOIN_COUNT = #{joinCount}
+            where ID = #{id}
+        </update>
 
     <delete id="remove">
         delete from activity where ID = #{id}
@@ -80,6 +92,7 @@
         <if test="status != 0">
             and STATUS = #{status}
         </if>
+        ORDER BY UPDATE_TIME desc
     </select>
 
 

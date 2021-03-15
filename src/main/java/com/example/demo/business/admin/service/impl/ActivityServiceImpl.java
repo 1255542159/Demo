@@ -1,5 +1,6 @@
 package com.example.demo.business.admin.service.impl;
 
+import com.example.demo.base.ResponseStatus;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.entity.Activity;
 import com.example.demo.business.admin.mapper.ActivityMapper;
@@ -34,21 +35,36 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public ResponseVo save(Activity entity) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        entity.setId(String.valueOf(idWorker.nextId()));
-        entity.setSponsorId(user.getId());
-        entity.setCreateTime(new Date());
-        entity.setIsDelete(0);
-        int save = activityMapper.save(entity);
-        if (save != 1) {
-            return ResponseVo.FAILURE();
+        //走更新路线
+        if(!entity.getId().equals("")){
+            entity.setUpdateTime(new Date());
+            entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
+            int update = activityMapper.update(entity);
+            if (update != 1) {
+                return ResponseVo.FAILURE();
+            }
+            return ResponseVo.SUCCESS().setMsg("更新成功");
+        }else {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User) authentication.getPrincipal();
+            entity.setId(String.valueOf(idWorker.nextId()));
+            entity.setSponsorId(user.getId());
+            entity.setCreateTime(new Date());
+            entity.setUpdateTime(new Date());
+            entity.setViewCount(0);
+            entity.setJoinCount(0);
+            entity.setIsDelete(0);
+            entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
+            int save = activityMapper.save(entity);
+            if (save != 1) {
+                return ResponseVo.FAILURE();
+            }
+            return ResponseVo.SUCCESS().setMsg("发布成功");
         }
-        return ResponseVo.SUCCESS().setMsg("发布成功");
     }
 
     @Override
-    public ResponseVo remove(Integer id) {
+    public ResponseVo remove(String id) {
         int remove = activityMapper.remove(id);
         if (remove != 1) {
             return ResponseVo.FAILURE();

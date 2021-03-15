@@ -31,7 +31,15 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * @return
      */
     @Override
-    int remove(Integer id);
+    int remove(String id);
+
+    /**
+     * 更新活动
+     * @param entity
+     * @return
+     */
+    @Override
+    int update(Activity entity);
 
     /**
      * 获取所有的活动

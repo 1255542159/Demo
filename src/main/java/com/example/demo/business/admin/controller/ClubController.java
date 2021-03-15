@@ -18,10 +18,6 @@ public class ClubController {
 
     @Autowired
     private ClubService clubService;
-
-    @Autowired
-    private UserService userService;
-
     /**
      * 添加社团
      *
@@ -33,15 +29,24 @@ public class ClubController {
     }
 
     /**
-     * 社团列表
+     * 社团列表分页
      * @return
      */
     @GetMapping("/clubList/{page}/{size}")
-    public ResponseVo getClubList(@RequestParam(value = "page", defaultValue = "1",required = false) int page,
-                                  @RequestParam(value = "size", defaultValue = "5",required = false) int size,
+    public ResponseVo getClubList(@PathVariable(value = "page",required = false) int page,
+                                  @PathVariable(value = "size", required = false) int size,
                                   @RequestParam(value = "status",required = false) Integer status,
                                   @RequestParam(value = "keyWords",required = false) String keyWords ){
         return clubService.getList(page,size,status,keyWords);
+    }
+
+    /**
+     * 获取社团列表不分页
+     * @return
+     */
+    @GetMapping("/list/club")
+    public ResponseVo list(){
+        return clubService.list();
     }
 
     /**
@@ -51,7 +56,7 @@ public class ClubController {
      * @return
      */
     @DeleteMapping("/deleteClub/{clubId}")
-    public ResponseVo deleteClub(@PathVariable("clubId") Integer clubId) {
+    public ResponseVo deleteClub(@PathVariable("clubId") String clubId) {
         return clubService.remove(clubId);
     }
 
