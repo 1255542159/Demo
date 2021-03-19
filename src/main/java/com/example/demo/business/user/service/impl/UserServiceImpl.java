@@ -196,12 +196,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseVo getImageList(int page, int size, String original) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User principal = (User) authentication.getPrincipal();
-            PageHelper.startPage(page, size);
-            List<Image> imageList = userMapper.getImageList(principal.getId(), original);
-            PageInfo<Image> imagePageInfo = new PageInfo<>(imageList);
-            return ResponseVo.SUCCESS().setData(imagePageInfo);
+            //获取全部
+            if(page == 0){
+                List<Image> imageList = userMapper.getImageList(null, original);
+                return ResponseVo.SUCCESS().setData(imageList);
+            }else {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User principal = (User) authentication.getPrincipal();
+                PageHelper.startPage(page, size);
+                List<Image> imageList = userMapper.getImageList(principal.getId(), original);
+                PageInfo<Image> imagePageInfo = new PageInfo<>(imageList);
+                return ResponseVo.SUCCESS().setData(imagePageInfo);
+            }
         } catch (Exception e) {
             return ResponseVo.FAILURE().setMsg("获取失败");
         }

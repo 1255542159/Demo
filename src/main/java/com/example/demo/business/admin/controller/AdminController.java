@@ -2,11 +2,11 @@ package com.example.demo.business.admin.controller;
 
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.service.impl.AdminServiceImpl;
+import com.example.demo.business.user.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author joy
@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController{
     @Autowired
     private AdminServiceImpl adminService;
+
+    @Autowired
+    private UserService userService;
     /**
      * 获取注册用户数
      *
@@ -36,8 +39,24 @@ public class AdminController{
      */
     @GetMapping("/web_site_info/club_count")
     public ResponseVo getClubCount() {
-
         return adminService.getClubCount();
     }
+
+
+    /**
+     * 轮播图上传
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/upload/carousel")
+    public ResponseVo uploadImage(@RequestParam("file") MultipartFile file,
+                                  @RequestParam("original") String original) {
+        return userService.uploadImage(file,original);
+    }
+
+
+
+
 
 }

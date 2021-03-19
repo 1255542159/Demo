@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.portal.mapper.PortalMapper">
+
+    <resultMap id="activityMap" type="com.example.demo.business.admin.entity.Activity">
+        <id column="ID" property="id"/>
+        <result column="TITLE" property="title"/>
+        <result column="SUMMARY" property="summary"/>
+        <result column="CONTENT" property="content"/>
+        <result column="START_TIME" property="startTime"/>
+        <result column="END_TIME" property="endTime"/>
+        <result column="SPONSOR_ID" property="sponsorId"/>
+        <result column="ACTIVITY_IMG" property="activityImg"/>
+        <result column="IS_DELETE" property="isDelete"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="STATUS" property="status"/>
+        <result column="VIEW_COUNT" property="viewCount"/>
+        <result column="JOIN_COUNT" property="joinCount"/>
+        <result column="CLUB_ID" property="clubId"/>
+    </resultMap>
+
+    <select id="getActivityList" resultType="java.util.HashMap">
+        select
+        ac.ID id,
+        ac.TITLE title,
+        ac.SUMMARY summary,
+        ac.START_TIME startTime,
+        ac.END_TIME endTime,
+        ac.CREATE_TIME createTime,
+        ac.UPDATE_TIME updateTime,
+        ac.ACTIVITY_IMG activityImg,
+        ac.VIEW_COUNT viewCount,
+        ac.JOIN_COUNT joinCount,
+        cl.CLUB_NAME clubName
+        from `activity` ac
+        left join club cl on cl.id = ac.CLUB_ID
+        where ac.IS_DELETE = 0
+        <if test="clubId != null">
+            and ac.CLUB_ID = #{clubId}
+        </if>
+        <if test="sponsorId != null">
+            and ac.SPONSOR_ID = #{sponsorId}
+        </if>
+        <if test="status != 0">
+            and ac.STATUS = #{status}
+        </if>
+        ORDER BY ac.UPDATE_TIME desc
+    </select>
+    <select id="getDetails" resultType="java.util.HashMap">
+        select
+        ac.ID id,
+        ac.TITLE title,
+        ac.SUMMARY summary,
+        ac.CONTENT content,
+        ac.START_TIME startTime,
+        ac.END_TIME endTime,
+        ac.CREATE_TIME createTime,
+        ac.UPDATE_TIME updateTime,
+        ac.ACTIVITY_IMG activityImg,
+        ac.VIEW_COUNT viewCount,
+        ac.JOIN_COUNT joinCount,
+        cl.CLUB_NAME clubName
+        from `activity` ac
+        left join club cl on cl.id = ac.CLUB_ID
+        where ac.IS_DELETE = 0
+        and ac.ID = #{id}
+    </select>
+
+
+</mapper>
