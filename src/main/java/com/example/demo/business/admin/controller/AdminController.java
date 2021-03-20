@@ -56,6 +56,17 @@ public class AdminController{
     }
 
 
+    @GetMapping("/role/list")
+    public ResponseVo roleList(){
+        return adminService.roleList();
+    }
+
+    @GetMapping("/power/list")
+    public  ResponseVo powerList(@RequestParam(value = "id",required = false) String id){
+        return adminService.powerList(id);
+    }
+
+
 
 
 

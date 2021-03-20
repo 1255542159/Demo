@@ -4,11 +4,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.demo.business.admin.mapper.AdminMapper">
 
+    <resultMap id="baseMap" type="com.example.demo.business.user.entity.Role">
+        <id column="ID" property="id"/>
+        <result column="ROLE_NAME" property="roleName"/>
+        <result column="ROLE_DESC" property="roleDesc"/>
+        <result column="STATUS" property="status"/>
+        <result column="IS_DELETE" property="isDelete"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
     <select id="getUserCount" resultType="java.lang.Integer">
         select count(1) from `user` where status = 0
     </select>
     <select id="getClubCount" resultType="java.lang.Integer">
         select count(1) from club where is_delete = 0
+    </select>
+    <select id="roleList" resultMap="baseMap">
+        select *from role where is_delete = 0
     </select>
 
 

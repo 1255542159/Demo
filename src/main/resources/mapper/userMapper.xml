@@ -113,11 +113,12 @@
         select * from `user` where phone = #{phone} and status = 0;
     </select>
     <select id="getMenuList" resultMap="baseMenu">
-            select m.ID,
+            select
+        DISTINCT(m.NAME),
+            m.ID,
             m.URL,
             m.PATH,
             m.COMPONENT,
-            m.NAME,
             m.ICON,
             m.KEEPALIVE,
             m.REQUIRE_AUTH,
@@ -125,7 +126,12 @@
             m.MENU_LEVEL
             from role_menu rm
             right join menu m on rm.MENU_ID = m.ID
-            where rm.ROLE_ID = #{id}
+            where 1=1
+            <if test="_parameter != null">
+                and rm.ROLE_ID = #{_parameter}
+            </if>
+
+
     </select>
     <select id="findAll" resultType="com.example.demo.business.user.entity.User">
 
@@ -156,6 +162,7 @@
         </if>
          and STATUS = 0
     </select>
+
 
 
 </mapper>

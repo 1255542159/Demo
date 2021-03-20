@@ -14,4 +14,8 @@ public interface AdminService {
     ResponseVo getUserCount();
 
     ResponseVo getClubCount();
+
+    ResponseVo roleList();
+
+    ResponseVo powerList(String id);
 }

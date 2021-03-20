@@ -1,7 +1,10 @@
 package com.example.demo.business.admin.mapper;
 
+import com.example.demo.business.user.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author joy
@@ -15,5 +18,7 @@ public interface AdminMapper {
     int getUserCount();
 
     int getClubCount();
+
+    List<Role> roleList();
 
 }
