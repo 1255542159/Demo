@@ -18,4 +18,10 @@ public interface AdminService {
     ResponseVo roleList();
 
     ResponseVo powerList(String id);
+
+    ResponseVo manageRole(String roleId, String idStr);
+
+    ResponseVo getList(int page, int size, Integer status, String keyWords);
+
+    ResponseVo issueRole(String userId, String roleId);
 }

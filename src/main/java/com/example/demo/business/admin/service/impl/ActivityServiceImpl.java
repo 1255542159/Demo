@@ -74,7 +74,12 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public ResponseVo update(Activity entity) {
-        return null;
+        entity.setUpdateTime(new Date());
+        int update = activityMapper.update(entity);
+        if (update != 1) {
+            return ResponseVo.FAILURE().setMsg("审核失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("审核成功");
     }
 
     @Override

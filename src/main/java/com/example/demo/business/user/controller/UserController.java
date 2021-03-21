@@ -1,10 +1,9 @@
 package com.example.demo.business.user.controller;
 
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.user.entity.Image;
+import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.service.UserService;
-import com.example.demo.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -117,6 +116,12 @@ public class UserController {
     @DeleteMapping("/deletePersonnel/{userId}")
     public ResponseVo deletePersonnel(@PathVariable("userId") String userId){
         return userService.remove(userId);
+    }
+
+
+    @PostMapping("/audit/join")
+    public ResponseVo auditJoin(@RequestBody Audit audit){
+        return userService.auditJoin(audit);
     }
 
 }

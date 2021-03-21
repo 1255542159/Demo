@@ -2,13 +2,11 @@ package com.example.demo.business.user.service;
 
 import com.example.demo.base.BaseService;
 import com.example.demo.base.ResponseVo;
-
-import com.example.demo.business.user.entity.Image;
+import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,4 +49,11 @@ public interface UserService extends UserDetailsService, BaseService<User> {
      * @return
      */
     ResponseVo getImageList(int page, int size, String original);
+
+    /**
+     * 入团申请
+     * @param audit
+     * @return
+     */
+    ResponseVo auditJoin(Audit audit);
 }

@@ -25,6 +25,10 @@ public class ActivityController {
         return activityService.save(activity);
     }
 
+    @PostMapping("/update/activity")
+    public ResponseVo updateActivity(@RequestBody Activity activity){
+        return activityService.update(activity);
+    }
 
     @GetMapping("/list/activity/{page}/{size}")
     public ResponseVo listActivity(@PathVariable(value = "page",required = false) int page,

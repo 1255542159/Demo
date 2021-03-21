@@ -38,7 +38,7 @@
         STATUS,
         CLUB_ID,
         VIEW_COUNT,
-        JOUN_COUNT
+        JOIN_COUNT
         )
         values (
             #{id},

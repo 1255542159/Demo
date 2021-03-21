@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.user.mapper.AuditMapper">
+
+    <resultMap id="baseMap" type="com.example.demo.business.user.entity.Audit">
+        <id property="id" column="ID"/>
+        <result property="type" column="TYPE"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="leaveTime" column="LEAVE_TIME"/>
+        <result property="status" column="STATUS"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="clubId" column="CLUB_ID"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+    </resultMap>
+    <insert id="save" parameterType="com.example.demo.business.user.entity.Audit">
+        insert
+        into audit(
+        ID,
+        `TYPE`,
+        DESCRIPTION,
+        LEAVE_TIME,
+        STATUS,
+        USER_ID,
+        CREATE_TIME,
+        CLUB_ID
+        )values (
+        #{id},
+        #{type},
+        #{description},
+        #{leaveTime},
+        #{status},
+        #{userId},
+        #{createTime},
+        #{clubId})
+    </insert>
+
+</mapper>

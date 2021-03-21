@@ -18,6 +18,7 @@ public class ClubController {
 
     @Autowired
     private ClubService clubService;
+
     /**
      * 添加社团
      *
@@ -69,7 +70,5 @@ public class ClubController {
     public ResponseVo updateClub(@RequestBody Club club) {
         return clubService.update(club);
     }
-
-
 
 }

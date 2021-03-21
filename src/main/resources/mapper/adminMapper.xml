@@ -14,6 +14,30 @@
         <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="userMap" type="com.example.demo.business.user.entity.UserVo">
+        <id column="ID" property="id"/>
+        <result column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="SNO" property="sno"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="SEX" property="sex"/>
+        <result column="AVATAR" property="avatar"/>
+        <result column="PHONE" property="phone"/>
+        <result column="EMAIL" property="email"/>
+        <result column="SIGN" property="sign"/>
+        <result column="STATUS" property="status"/>
+        <result column="REG_ID" property="regIp"/>
+        <result column="LOGIN_IP" property="loginIp"/>
+        <result column="CLUB_ID" property="clubId"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <!--关联查询-->
+        <collection property="role" column="ID" ofType="com.example.demo.business.user.entity.Role"
+                    select="com.example.demo.business.user.mapper.RoleMapper.findRolesByUserId"/>
+    </resultMap>
+
+
+
     <select id="getUserCount" resultType="java.lang.Integer">
         select count(1) from `user` where status = 0
     </select>
@@ -22,6 +46,9 @@
     </select>
     <select id="roleList" resultMap="baseMap">
         select *from role where is_delete = 0
+    </select>
+    <select id="getList" resultMap="userMap">
+        select *from `user` where STATUS = 0
     </select>
 
 

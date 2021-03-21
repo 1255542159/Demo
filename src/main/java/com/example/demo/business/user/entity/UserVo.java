@@ -40,7 +40,7 @@ public class UserVo {
     @ApiModelProperty(notes = "登录IP")
     private String loginIp;
     @ApiModelProperty(notes = "社团ID")
-    private Integer clubId;
+    private String clubId;
     @ApiModelProperty(notes = "社团")
     private Club club;
     @ApiModelProperty(notes = "负责人ID")
@@ -49,5 +49,7 @@ public class UserVo {
     private Date createTime;
     @ApiModelProperty(notes = "更新时间")
     private Date updateTime;
+    @ApiModelProperty(notes = "角色")
+    private Role role;
 
 }

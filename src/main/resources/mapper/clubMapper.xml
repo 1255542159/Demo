@@ -16,11 +16,13 @@
         <result property="createTime" column="CREATE_TIME"/>
         <result property="updateTime" column="UPDATE_TIME"/>
         <result property="amount" column="AMOUNT"/>
+        <result property="status" column="STATUS"/>
 
     </resultMap>
     <insert id="save" parameterType="com.example.demo.business.admin.entity.Club">
     insert into
         club(
+        ID,
        CLUB_NAME,
        CLUB_CREATOR,
        LEADER_ID,
@@ -29,9 +31,11 @@
        CLUB_IMG,
        IS_DELETE,
        CREATE_TIME,
-       UPDATE_TIME
+       UPDATE_TIME,
+       STATUS
         )
         values (
+        #{id},
         #{clubName},
         #{clubCreator},
         #{leaderId},
@@ -40,7 +44,8 @@
         #{clubImg},
         #{isDelete},
         #{createTime},
-        #{updateTime}
+        #{updateTime},
+        #{status}
         )
     </insert>
     <update id="update">
@@ -53,7 +58,8 @@
         CLUB_DESC = #{clubDesc},
         CLUB_IMG = #{clubImg},
         UPDATE_TIME = #{updateTime},
-        IS_DELETE = #{isDelete}
+        IS_DELETE = #{isDelete},
+        STATUS = #{status}
         where
         ID = #{id}
     </update>
@@ -68,12 +74,34 @@ u.AMOUNT AS AMOUNT
 from club c
 left join  (select count(1) as AMOUNT,CLUB_ID from user where status =0 GROUP BY CLUB_ID) u
 on u.CLUB_ID = c.id
+where 1=1
+and c.status=1
 GROUP BY c.id
-ORDER BY c.CREATE_TIME asc
+ORDER BY c.CREATE_TIME desc
     </select>
 
     <select id="findClubById" resultMap="baseMap">
         select *from club where id=#{clubId}
+    </select>
+    <select id="findClubByName" resultMap="baseMap">
+        select *from club where CLUB_NAME = #{clubName}
+    </select>
+    <select id="getClubList" resultMap="baseMap">
+        select c.id,c.CLUB_NAME,c.CLUB_CREATOR,c.LEADER_ID,c.CLUB_INTRODUCE,c.CLUB_IMG,c.IS_DELETE,c.CREATE_TIME,c.UPDATE_TIME,
+        c.CLUB_DESC,c.STATUS,
+        u.AMOUNT AS AMOUNT
+        from club c
+        left join  (select count(1) as AMOUNT,CLUB_ID from user where status =0 GROUP BY CLUB_ID) u
+        on u.CLUB_ID = c.id
+        where 1=1
+        <if test="status != 0">
+            and c.STATUS = #{status}
+        </if>
+        <if test="leaderId != null">
+            and c.LEADER_ID = #{leaderId}
+        </if>
+        GROUP BY c.id
+        ORDER BY c.CREATE_TIME desc
     </select>
 
 

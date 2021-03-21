@@ -15,7 +15,5 @@ public class Role extends BaseEntity {
   private String roleDesc;
   private Integer status;
   private Integer isDelete;
-
   private List<Menu> childMenu;
-
 }

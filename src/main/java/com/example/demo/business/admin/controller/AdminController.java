@@ -1,6 +1,8 @@
 package com.example.demo.business.admin.controller;
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.admin.entity.Activity;
+import com.example.demo.business.admin.service.ActivityService;
 import com.example.demo.business.admin.service.impl.AdminServiceImpl;
 import com.example.demo.business.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -22,6 +24,9 @@ public class AdminController{
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ActivityService activityService;
     /**
      * 获取注册用户数
      *
@@ -56,18 +61,55 @@ public class AdminController{
     }
 
 
+    /**
+     * 获取所有的角色
+     * @return
+     */
     @GetMapping("/role/list")
     public ResponseVo roleList(){
         return adminService.roleList();
     }
 
+    /**
+     * 获取所有的菜单权限
+     * @param id
+     * @return
+     */
     @GetMapping("/power/list")
     public  ResponseVo powerList(@RequestParam(value = "id",required = false) String id){
         return adminService.powerList(id);
     }
 
 
+    /**
+     * 角色管理
+     * @param roleId
+     * @param idStr
+     * @return
+     */
+    @PostMapping("/role/manage/{roleId}/{idStr}")
+    public ResponseVo manageRole(@PathVariable(value = "roleId") String roleId,
+                                @PathVariable(value = "idStr") String idStr){
+        return adminService.manageRole(roleId,idStr);
+    }
 
+    @PostMapping("/role/issue/{userId}/{roleId}")
+    public ResponseVo issueRole(@PathVariable(value = "roleId") String roleId,
+                                @PathVariable(value = "userId") String userId){
+        return adminService.issueRole(userId,roleId);
+    }
 
+    /**
+     * 人员列表
+     *
+     * @return
+     */
+    @GetMapping("/personnelList/{page}/{size}")
+    public ResponseVo personnelList(@PathVariable(value = "page", required = false) int page,
+                                    @PathVariable(value = "size", required = false) int size,
+                                    @RequestParam(value = "status",required = false) Integer status,
+                                    @RequestParam(value = "keyWords", required = false) String keyWords) {
+        return adminService.getList(page, size, status,keyWords);
+    }
 
 }

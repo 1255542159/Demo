@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.admin.mapper.RoleMenuMapper">
+
+    <insert id="saveRoleMenu">
+        insert into role_menu (ID,ROLE_ID,MENU_ID) values
+        <foreach collection="roleMenuList" separator="," item="RoleMenu">
+            (#{RoleMenu.id},#{RoleMenu.roleId},#{RoleMenu.menuId})
+        </foreach>
+    </insert>
+    <delete id="delete">
+        delete  from role_menu where ROLE_ID = #{roleId}
+    </delete>
+</mapper>

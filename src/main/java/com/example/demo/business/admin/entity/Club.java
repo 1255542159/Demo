@@ -15,7 +15,7 @@ public class Club extends BaseEntity {
     @ApiModelProperty(notes = "社团创建者")
     private String clubCreator;
     @ApiModelProperty(notes = "社团负责人")
-    private long leaderId;
+    private String leaderId;
     @ApiModelProperty(notes = "社团介绍")
     private String clubIntroduce;
     @ApiModelProperty(notes = "社团描述")
@@ -26,4 +26,6 @@ public class Club extends BaseEntity {
     private Integer isDelete;
     @ApiModelProperty(notes = "社团人数")
     private Integer amount;
+    @ApiModelProperty(notes = "状态1表示已通过，2审核中，3已拒绝")
+    private Integer status;
 }

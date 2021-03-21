@@ -3,15 +3,14 @@ package com.example.demo.business.user.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.entity.Club;
-import com.example.demo.business.user.entity.Image;
-import com.example.demo.business.user.entity.UserVo;
+import com.example.demo.business.user.entity.*;
+import com.example.demo.business.user.mapper.AuditMapper;
 import com.example.demo.business.user.mapper.ImageMapper;
 import com.example.demo.business.user.service.UserService;
-import com.example.demo.business.user.entity.Menu;
-import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.utils.Constants;
 import com.example.demo.utils.SnowflakeIdWorker;
+import com.example.demo.utils.Tools;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qiniu.common.Zone;
@@ -56,6 +55,9 @@ public class UserServiceImpl implements UserService {
     private ImageMapper imageMapper;
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private AuditMapper auditMapper;
 
     /**
      * 设置好账号的ACCESS_KEY和SECRET_KEY
@@ -212,6 +214,26 @@ public class UserServiceImpl implements UserService {
             return ResponseVo.FAILURE().setMsg("获取失败");
         }
 
+    }
+
+    @Override
+    public ResponseVo auditJoin(Audit audit) {
+
+        User currentUser = Tools.getCurrentUser();
+        //先查询当前用户是否已存在社团，若存在则提示退出当前社团
+        if(!currentUser.getClubId().equals("0")){
+            return ResponseVo.FAILURE().setMsg("若要申请入社，请退出当前社团!");
+        }else {
+            audit.setUserId(currentUser.getId());
+            audit.setId(String.valueOf(idWorker.nextId()));
+            audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
+            audit.setCreateTime(new Date());
+            int res = auditMapper.save(audit);
+            if(res != 1){
+                return ResponseVo.FAILURE().setMsg("申请失败");
+            }
+        }
+        return ResponseVo.SUCCESS().setMsg("申请成功");
     }
 
     private List<Menu> getChild(String id, List<Menu> menuList) {

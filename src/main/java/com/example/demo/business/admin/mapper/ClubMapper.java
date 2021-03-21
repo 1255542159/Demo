@@ -2,6 +2,7 @@ package com.example.demo.business.admin.mapper;
 
 
 import com.example.demo.base.BaseMapper;
+import com.example.demo.business.admin.entity.Activity;
 import com.example.demo.business.admin.entity.Club;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,11 @@ public interface ClubMapper extends BaseMapper<Club> {
      * 查询所有社团
      * @return
      */
+    List<Club> getClubList(String leaderId,int status);
+
+    Club findClubByName(String clubName);
+
+
     @Override
     List<Club> findAll();
 }
