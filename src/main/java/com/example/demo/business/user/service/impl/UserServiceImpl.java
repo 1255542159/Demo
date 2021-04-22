@@ -6,6 +6,7 @@ import com.example.demo.business.admin.entity.Club;
 import com.example.demo.business.user.entity.*;
 import com.example.demo.business.user.mapper.AuditMapper;
 import com.example.demo.business.user.mapper.ImageMapper;
+import com.example.demo.business.user.mapper.UserRoleMapper;
 import com.example.demo.business.user.service.UserService;
 import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.utils.Constants;
@@ -29,6 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
     @Autowired
     private SnowflakeIdWorker idWorker;
     @Autowired
@@ -104,7 +108,6 @@ public class UserServiceImpl implements UserService {
     public String getUpToken() {
         return getAuth().uploadToken(bucketname);
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -213,17 +216,65 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             return ResponseVo.FAILURE().setMsg("获取失败");
         }
-
     }
 
     @Override
-    public ResponseVo auditJoin(Audit audit) {
+    public ResponseVo applyJoin(Audit audit) {
 
         User currentUser = Tools.getCurrentUser();
-        //先查询当前用户是否已存在社团，若存在则提示退出当前社团
-        if(!currentUser.getClubId().equals("0")){
-            return ResponseVo.FAILURE().setMsg("若要申请入社，请退出当前社团!");
+        audit.setUserId(currentUser.getId());
+        //判断是更新还是保存
+        if(audit.getId() != null){
+            //更新
+            audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
+            audit.setUpdateTime(new Date());
+            int save = auditMapper.update(audit);
+            if(save != 1){
+                return ResponseVo.FAILURE().setMsg("更新失败");
+            }
         }else {
+            //先查询当前用户是否已存在社团，若存在则提示退出当前社团
+            if(!currentUser.getClubId().equals("0")){
+                return ResponseVo.FAILURE().setMsg("若要申请入社，请退出当前社团!");
+            }else {
+                audit.setId(String.valueOf(idWorker.nextId()));
+                audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
+                audit.setCreateTime(new Date());
+                int res = auditMapper.save(audit);
+                if(res != 1){
+                    return ResponseVo.FAILURE().setMsg("申请失败");
+                }
+            }
+        }
+
+        return ResponseVo.SUCCESS().setMsg("更新成功");
+    }
+
+    @Override
+    public ResponseVo applyQuit(Audit audit) {
+        //退团申请，1查看当前用户是否存在社团，或退团id与自身社团id不符合
+        User currentUser = Tools.getCurrentUser();
+        //不存在社团
+        if(currentUser.getClubId() == null || currentUser.getClubId().equals("0")){
+            return ResponseVo.FAILURE().setMsg("你当前不在社团内!");
+        }else if(!audit.getClubId().equals(currentUser.getClubId())){
+            return ResponseVo.FAILURE().setMsg("你当前不在此社团内!");
+        }else {
+            audit.setUserId(currentUser.getId());
+            audit.setId(String.valueOf(idWorker.nextId()));
+            audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
+            audit.setCreateTime(new Date());
+            int save = auditMapper.save(audit);
+            if(save != 1){
+                return ResponseVo.FAILURE().setMsg("申请失败");
+            }
+        }
+        return ResponseVo.SUCCESS().setMsg("申请成功");
+    }
+
+    @Override
+    public ResponseVo applyLeave(Audit audit) {
+        User currentUser = Tools.getCurrentUser();
             audit.setUserId(currentUser.getId());
             audit.setId(String.valueOf(idWorker.nextId()));
             audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
@@ -232,8 +283,24 @@ public class UserServiceImpl implements UserService {
             if(res != 1){
                 return ResponseVo.FAILURE().setMsg("申请失败");
             }
-        }
         return ResponseVo.SUCCESS().setMsg("申请成功");
+    }
+
+    @Override
+    public ResponseVo applyList(int page, int size) {
+        PageHelper.startPage(page,size);
+        List<Audit> list = auditMapper.list(Tools.getCurrentUser().getId());
+        PageInfo<Audit> auditPageInfo = new PageInfo<>(list);
+        return ResponseVo.SUCCESS().setData(auditPageInfo);
+    }
+
+    @Override
+    public ResponseVo applyDelete(String id) {
+        int remove = auditMapper.remove(id);
+        if (remove != 1) {
+            return ResponseVo.FAILURE().setMsg("删除失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("删除成功");
     }
 
     private List<Menu> getChild(String id, List<Menu> menuList) {
@@ -247,19 +314,32 @@ public class UserServiceImpl implements UserService {
         return childMenu;
     }
 
+    @Transactional
     @Override
     public ResponseVo save(User entity) {
-        if (entity.getAvatar() == null) {
-            entity.setAvatar(Constants.DEFAULT.AVATAR);
-        }
-        entity.setCreateTime(new Date());
-        entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
-        entity.setId(String.valueOf(idWorker.nextId()));
-        entity.setRegIp(request.getRemoteAddr());
-        entity.setStatus(0);
-        int save = userMapper.save(entity);
-        if (save != 1) {
-            return ResponseVo.FAILURE().setMsg("添加失败");
+        //先去查询当前是否存在该账户
+        User userByPhone = userMapper.findUserByPhone(entity.getPhone());
+        if (userByPhone != null){
+            return ResponseVo.FAILURE().setMsg("该用户已存在");
+        }else {
+            if (entity.getAvatar() == null || entity.getAvatar().equals("")) {
+                entity.setAvatar(Constants.DEFAULT.AVATAR);
+            }
+            entity.setCreateTime(new Date());
+            entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
+            entity.setId(String.valueOf(idWorker.nextId()));
+            entity.setRegIp(request.getRemoteAddr());
+            entity.setStatus(0);
+            int save = userMapper.save(entity);
+            //设置当前用户的角色为普通用户
+            UserRole userRole = new UserRole();
+            userRole.setId(String.valueOf(idWorker.nextId()));
+            userRole.setUserId(entity.getId());
+            userRole.setRoleId(Constants.RoleId.ROLE_USER);
+            int res = userRoleMapper.save(userRole);
+            if (save != 1) {
+                return ResponseVo.FAILURE().setMsg("添加失败");
+            }
         }
         return ResponseVo.SUCCESS().setMsg("添加成功");
     }

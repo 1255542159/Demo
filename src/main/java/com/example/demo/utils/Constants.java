@@ -7,7 +7,7 @@ package com.example.demo.utils;
  */
 public interface Constants {
     interface DEFAULT {
-        String AVATAR = "https://imgs.sunofbeaches.com/group1/M00/00/07/rBsADV22ZymAV8BwAABVL9XtNSU926.png";
+        String AVATAR = "https://imgs.sunofbeaches.com/group1/M00/00/3A/rBsADV_PbTyAJexxAABHFzLgPUo164.png";
     }
 
     interface Page {
@@ -23,6 +23,13 @@ public interface Constants {
         String ROLE_CLUB = "ROLE_CLUB";
         String ROLE_USER = "ROLE_USER";
     }
+
+    interface RoleId {
+        String ROLE_ADMIN = "1";
+        String ROLE_CLUB = "2";
+        String ROLE_USER = "3";
+    }
+
 
     /**
      * 活动状态

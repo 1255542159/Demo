@@ -36,5 +36,34 @@
         #{createTime},
         #{clubId})
     </insert>
+    <update id="update">
+        update audit set
+        `TYPE` = #{type},
+        DESCRIPTION = #{description},
+        LEAVE_TIME = #{leaveTime},
+        STATUS = #{status},
+        USER_ID = #{userId},
+        UPDATE_TIME = #{updateTime},
+        CLUB_ID = #{clubId}
+        where ID = #{id}
+    </update>
+    <delete id="remove">
+        delete from audit where id =#{id}
+    </delete>
+    <select id="list" resultMap="baseMap">
+        select *from audit where 1=1 and user_id = #{userId}
+    </select>
+    <select id="getAuditList" resultMap="baseMap">
+        select a.* from audit a
+        left join club c on c.id= a.CLUB_ID
+        where 1=1
+        and a.STATUS = 2
+        <if test="type != null">
+            and a.TYPE  = #{type}
+        </if>
+        <if test="id != null">
+            and c.LEADER_ID = #{id}
+        </if>
+    </select>
 
 </mapper>

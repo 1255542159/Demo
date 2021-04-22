@@ -31,4 +31,10 @@ public interface PortalService{
      * @return
      */
     ResponseVo getDetails(String id);
+
+    ResponseVo listClub(int page,int size);
+
+    ResponseVo getClubDetail(String id);
+
+    ResponseVo getActivityUserInfo(String id);
 }

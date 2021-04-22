@@ -1,6 +1,7 @@
 package com.example.demo.business.user.mapper;
 
 import com.example.demo.business.user.entity.Role;
+import com.example.demo.business.user.entity.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,5 @@ public interface UserRoleMapper {
 
     int updateUserRole(String userId, String roleId);
 
+    int save(UserRole userRole);
 }

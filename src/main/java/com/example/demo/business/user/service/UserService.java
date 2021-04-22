@@ -55,5 +55,34 @@ public interface UserService extends UserDetailsService, BaseService<User> {
      * @param audit
      * @return
      */
-    ResponseVo auditJoin(Audit audit);
+    ResponseVo applyJoin(Audit audit);
+
+    /**
+     * 退团申请
+     * @param audit
+     * @return
+     */
+    ResponseVo applyQuit(Audit audit);
+
+    /**
+     * 请假申请
+     * @param audit
+     * @return
+     */
+    ResponseVo applyLeave(Audit audit);
+
+    /**
+     * 我的申请列表
+     * @param page
+     * @param size
+     * @return
+     */
+    ResponseVo applyList(int page, int size);
+
+    /**
+     * 根据id删除申请
+    * @param id
+     * @return
+     */
+    ResponseVo applyDelete(String id);
 }

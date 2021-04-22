@@ -77,6 +77,9 @@
             JOIN_COUNT = #{joinCount}
             where ID = #{id}
         </update>
+    <update id="updateViewCountById">
+        update activity set VIEW_COUNT = VIEW_COUNT + 1 where ID = #{id}
+    </update>
 
     <delete id="remove">
         delete from activity where ID = #{id}

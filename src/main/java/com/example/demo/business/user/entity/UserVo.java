@@ -51,5 +51,4 @@ public class UserVo {
     private Date updateTime;
     @ApiModelProperty(notes = "角色")
     private Role role;
-
 }

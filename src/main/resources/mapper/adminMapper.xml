@@ -14,6 +14,17 @@
         <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="imgMap" type="com.example.demo.business.user.entity.Image">
+        <id column="ID" property="id"/>
+        <result column="URL" property="url"/>
+        <result column="STATUS" property="status"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="ORIGINAL" property="original"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+
     <resultMap id="userMap" type="com.example.demo.business.user.entity.UserVo">
         <id column="ID" property="id"/>
         <result column="ID" property="id"/>
@@ -35,7 +46,28 @@
         <collection property="role" column="ID" ofType="com.example.demo.business.user.entity.Role"
                     select="com.example.demo.business.user.mapper.RoleMapper.findRolesByUserId"/>
     </resultMap>
-
+    <update id="updateCarousel" parameterType="com.example.demo.business.user.entity.Image">
+        update image set
+        <if test="url != null">
+            `URL` = #{url},
+        </if>
+        <if test="status != null">
+            `STATUS` = #{status},
+        </if>
+        <if test="original != null">
+            `ORIGINAL` = #{original},
+        </if>
+        <if test="userId != null">
+            `USER_ID` = #{userId},
+        </if>
+        <if test="updateTime != null">
+            `UPDATE_TIME` = #{updateTime},
+        </if>
+        where ID = #{id}
+    </update>
+    <delete id="deleteCarousel">
+        delete from image where id = #{id}
+    </delete>
 
 
     <select id="getUserCount" resultType="java.lang.Integer">
@@ -49,6 +81,18 @@
     </select>
     <select id="getList" resultMap="userMap">
         select *from `user` where STATUS = 0
+    </select>
+    <select id="getActivityCount" resultType="java.lang.Integer">
+        select count(1) from activity where is_delete = 0
+    </select>
+    <select id="loginLog" resultType="java.util.HashMap">
+        select
+        LOGIN_IP loginIp,
+        REG_ID regIp
+        from
+        `user`
+        where
+        id = #{id}
     </select>
 
 

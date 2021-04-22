@@ -72,7 +72,7 @@
         c.CLUB_DESC,
 u.AMOUNT AS AMOUNT
 from club c
-left join  (select count(1) as AMOUNT,CLUB_ID from user where status =0 GROUP BY CLUB_ID) u
+left join  (select count(*) as AMOUNT,CLUB_ID from user where status =0 GROUP BY CLUB_ID) u
 on u.CLUB_ID = c.id
 where 1=1
 and c.status=1

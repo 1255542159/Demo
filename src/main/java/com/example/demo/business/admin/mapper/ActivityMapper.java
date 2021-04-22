@@ -46,4 +46,11 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * @return
      */
     List<Activity> getActivityList(String clubId,String sponsorId,int status);
+
+    /**
+     * 根据活动id更新阅读数量
+     * @param id
+     * @return
+     */
+    int updateViewCountById(String id);
 }

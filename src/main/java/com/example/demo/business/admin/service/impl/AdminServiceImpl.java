@@ -133,4 +133,55 @@ public class AdminServiceImpl implements AdminService {
         }
         return ResponseVo.SUCCESS().setMsg("分配成功");
     }
+
+    @Override
+    public ResponseVo updateCarousel(Image image) {
+
+        try {
+            int i = adminMapper.updateCarousel(image);
+            if( i != 1){
+                return ResponseVo.FAILURE().setMsg("修改失败");
+            }
+        } catch (Exception e) {
+            return ResponseVo.FAILURE().setMsg("修改失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("修改成功");
+    }
+
+    @Override
+    public ResponseVo deleteCarousel(String id) {
+        try {
+            int i = adminMapper.deleteCarousel(id);
+            if( i != 1){
+                return ResponseVo.FAILURE().setMsg("修改失败");
+            }
+        } catch (Exception e) {
+            return ResponseVo.FAILURE().setMsg("修改失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("修改成功");
+    }
+
+    @Override
+    public ResponseVo getActivityCount() {
+        try {
+            int activityCount = adminMapper.getActivityCount();
+            return ResponseVo.SUCCESS().setData(activityCount);
+        } catch (Exception e) {
+            return ResponseVo.FAILURE();
+        }
+    }
+
+    @Override
+    public ResponseVo loginLog() {
+        try {
+            User currentUser = Tools.getCurrentUser();
+
+            HashMap<String, Object> data = adminMapper.loginLog(currentUser.getId());
+            return ResponseVo.SUCCESS().setData(data);
+        } catch (Exception e) {
+            return ResponseVo.FAILURE();
+        }
+    }
+
+
 }

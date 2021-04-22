@@ -22,6 +22,27 @@
         <result column="CLUB_ID" property="clubId"/>
     </resultMap>
 
+    <resultMap id="userMap" type="com.example.demo.business.user.entity.UserVo">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="SNO" property="sno"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="SEX" property="sex"/>
+        <result column="AVATAR" property="avatar"/>
+        <result column="PHONE" property="phone"/>
+        <result column="EMAIL" property="email"/>
+        <result column="SIGN" property="sign"/>
+        <result column="STATUS" property="status"/>
+        <result column="REG_ID" property="regIp"/>
+        <result column="LOGIN_IP" property="loginIp"/>
+        <result column="CLUB_ID" property="clubId"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <!--关联查询-->
+        <collection property="club" column="CLUB_ID" ofType="com.example.demo.business.admin.entity.Club"
+                    select="com.example.demo.business.admin.mapper.ClubMapper.findClubById"/>
+    </resultMap>
+
     <select id="getActivityList" resultType="java.util.HashMap">
         select
         ac.ID id,
@@ -34,7 +55,8 @@
         ac.ACTIVITY_IMG activityImg,
         ac.VIEW_COUNT viewCount,
         ac.JOIN_COUNT joinCount,
-        cl.CLUB_NAME clubName
+        cl.CLUB_NAME clubName,
+        ac.SPONSOR_ID sponsorId
         from `activity` ac
         left join club cl on cl.id = ac.CLUB_ID
         where ac.IS_DELETE = 0
@@ -62,11 +84,28 @@
         ac.ACTIVITY_IMG activityImg,
         ac.VIEW_COUNT viewCount,
         ac.JOIN_COUNT joinCount,
-        cl.CLUB_NAME clubName
+        cl.CLUB_NAME clubName,
+        ac.SPONSOR_ID sponsorId
         from `activity` ac
         left join club cl on cl.id = ac.CLUB_ID
         where ac.IS_DELETE = 0
         and ac.ID = #{id}
+    </select>
+    <select id="getClubList" resultType="java.util.HashMap">
+        SELECT cl.id id,
+        cl.CLUB_NAME clubName,
+        cl.CLUB_IMG clubImg,cl.CREATE_TIME createTime,cl.CLUB_CREATOR creator,u.NAME name
+        from `club` cl
+        left join `user` u on u.id = cl.LEADER_ID where cl.`STATUS` =1
+    </select>
+    <select id="getClubDetail" resultType="java.util.HashMap">
+SELECT cl.CLUB_NAME clubName,
+        cl.CLUB_IMG clubImg,cl.CREATE_TIME createTime,cl.CLUB_CREATOR creator,u.NAME name,cl.CLUB_INTRODUCE introduce,cl.CLUB_DESC des
+        from `club` cl
+        left join `user` u on u.id = cl.LEADER_ID where cl.`STATUS` =1 and cl.id = #{id}
+    </select>
+    <select id="getActivityUserInfo" resultMap="userMap">
+        select *from `user` where 1 = 1 and STATUS = 0 and id = #{id}
     </select>
 
 

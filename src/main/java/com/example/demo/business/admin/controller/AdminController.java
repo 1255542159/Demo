@@ -1,9 +1,9 @@
 package com.example.demo.business.admin.controller;
 
 import com.example.demo.base.ResponseVo;
-import com.example.demo.business.admin.entity.Activity;
 import com.example.demo.business.admin.service.ActivityService;
 import com.example.demo.business.admin.service.impl.AdminServiceImpl;
+import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +45,25 @@ public class AdminController{
     @GetMapping("/web_site_info/club_count")
     public ResponseVo getClubCount() {
         return adminService.getClubCount();
+    }
+
+
+    /**
+     * 获取活动总数
+     * @return
+     */
+    @GetMapping("/web_site_info/activity_count")
+    public ResponseVo getActivityCount() {
+        return adminService.getActivityCount();
+    }
+
+    /**
+     * 获取登录日志
+     * @return
+     */
+    @GetMapping("/web_site_info/loginLog")
+    public ResponseVo loginLog() {
+        return adminService.loginLog();
     }
 
 
@@ -110,6 +129,25 @@ public class AdminController{
                                     @RequestParam(value = "status",required = false) Integer status,
                                     @RequestParam(value = "keyWords", required = false) String keyWords) {
         return adminService.getList(page, size, status,keyWords);
+    }
+
+
+    /**
+     *轮播图更新
+     * @return
+     */
+    @PostMapping("/update/carousel")
+    public ResponseVo updateCarousel(@RequestBody Image image) {
+        return adminService.updateCarousel(image);
+    }
+
+    /**
+     *轮播图删除
+     * @return
+     */
+    @PostMapping("/delete/carousel/{id}")
+    public ResponseVo deleteCarousel(@PathVariable String id) {
+        return adminService.deleteCarousel(id);
     }
 
 }

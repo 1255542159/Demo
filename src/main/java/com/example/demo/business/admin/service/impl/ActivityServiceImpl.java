@@ -45,19 +45,24 @@ public class ActivityServiceImpl implements ActivityService {
             }
             return ResponseVo.SUCCESS().setMsg("更新成功");
         }else {
+            //查询当前用户是否已经加入社团
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) authentication.getPrincipal();
-            entity.setId(String.valueOf(idWorker.nextId()));
-            entity.setSponsorId(user.getId());
-            entity.setCreateTime(new Date());
-            entity.setUpdateTime(new Date());
-            entity.setViewCount(0);
-            entity.setJoinCount(0);
-            entity.setIsDelete(0);
-            entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
-            int save = activityMapper.save(entity);
-            if (save != 1) {
-                return ResponseVo.FAILURE();
+            if(user.getClubId().equals("")){
+                return ResponseVo.FAILURE().setMsg("暂未加入社团，无法发布");
+            }else {
+                entity.setId(String.valueOf(idWorker.nextId()));
+                entity.setSponsorId(user.getId());
+                entity.setCreateTime(new Date());
+                entity.setUpdateTime(new Date());
+                entity.setViewCount(0);
+                entity.setJoinCount(0);
+                entity.setIsDelete(0);
+                entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
+                int save = activityMapper.save(entity);
+                if (save != 1) {
+                    return ResponseVo.FAILURE().setMsg("发布失败");
+                }
             }
             return ResponseVo.SUCCESS().setMsg("发布成功");
         }

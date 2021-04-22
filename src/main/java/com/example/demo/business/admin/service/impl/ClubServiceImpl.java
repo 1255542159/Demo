@@ -4,7 +4,10 @@ import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.entity.Club;
 import com.example.demo.business.admin.mapper.ClubMapper;
 import com.example.demo.business.admin.service.ClubService;
+import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
+import com.example.demo.business.user.mapper.AuditMapper;
+import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.utils.Constants;
 import com.example.demo.utils.SnowflakeIdWorker;
 import com.example.demo.utils.Tools;
@@ -29,6 +32,11 @@ public class ClubServiceImpl implements ClubService {
 
     @Autowired
     private SnowflakeIdWorker idWorker;
+
+    @Autowired
+    private AuditMapper auditMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public ResponseVo getList(int page, int size, int status, String keyWords) {
@@ -108,5 +116,47 @@ public class ClubServiceImpl implements ClubService {
     public ResponseVo list() {
         List<Club> all = clubMapper.findAll();
         return ResponseVo.SUCCESS().setData(all);
+    }
+
+    @Override
+    public ResponseVo getAuditList(int page, int size, String type) {
+        try {
+            User currentUser = Tools.getCurrentUser();
+            PageHelper.startPage(page, size);
+            List<Audit> all = null;
+            if (currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)) {
+                //如果是超级管理员，则查看所有
+                all = auditMapper.getAuditList(null,  type);
+            } else{
+                //(currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_CLUB))
+                //如果是社团管理员 查看当前社团下的所有申请
+                all = auditMapper.getAuditList(currentUser.getId(), type);
+            }
+            PageInfo<Audit> activityPageInfo = new PageInfo<>(all);
+            return ResponseVo.SUCCESS().setData(activityPageInfo);
+        } catch (Exception e) {
+            return ResponseVo.FAILURE().setMsg("获取失败");
+        }
+    }
+
+    @Override
+    public ResponseVo agreeAudit(Audit audit) {
+        //如果是入团和退团申请，额外的需要更新用户信息
+        if(audit.getType().equals("quit")){
+            User user = new User();
+            user.setId(audit.getUserId());
+            user.setClubId("");
+            userMapper.update(user);
+        }else if (audit.getType().equals("join")){
+            User user = new User();
+            user.setId(audit.getUserId());
+            user.setClubId(audit.getClubId());
+            userMapper.update(user);
+        }
+        int update = auditMapper.update(audit);
+        if (update != 1) {
+            return ResponseVo.FAILURE().setMsg("审核失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("审核成功");
     }
 }

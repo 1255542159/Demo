@@ -2,6 +2,7 @@ package com.example.demo.business.admin.service;
 
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.user.entity.Image;
 
 /**
  * @author joy
@@ -24,4 +25,12 @@ public interface AdminService {
     ResponseVo getList(int page, int size, Integer status, String keyWords);
 
     ResponseVo issueRole(String userId, String roleId);
+
+    ResponseVo updateCarousel(Image image);
+
+    ResponseVo deleteCarousel(String id);
+
+    ResponseVo getActivityCount();
+
+    ResponseVo loginLog();
 }

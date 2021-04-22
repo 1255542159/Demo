@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 登录URL
                 .antMatchers("/login").permitAll()
                 .antMatchers("/portal/**").permitAll()
-                .antMatchers("/user/captcha", "/user/check-token", "/user/uploadImage").permitAll()
+                .antMatchers("/user/addPersonnel", "/user/check-token", "/user/uploadImage").permitAll()
                 .antMatchers("/admin/web_site_info/**").permitAll()
                 .antMatchers("/swagger**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()

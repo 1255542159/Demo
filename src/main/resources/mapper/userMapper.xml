@@ -61,6 +61,17 @@
         <collection property="club" column="CLUB_ID" ofType="com.example.demo.business.admin.entity.Club"
                     select="com.example.demo.business.admin.mapper.ClubMapper.findClubById"/>
     </resultMap>
+
+    <resultMap id="imgMap" type="com.example.demo.business.user.entity.Image">
+        <id column="ID" property="id"/>
+        <result column="URL" property="url"/>
+        <result column="STATUS" property="status"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="ORIGINAL" property="original"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
     <insert id="save">
         insert into `user`(
         ID,`NAME`,SNO,PASSWORD,SEX,
@@ -101,6 +112,9 @@
         </if>
         <if test="avatar != null">
             AVATAR = #{avatar},
+        </if>
+        <if test="loginIp != null">
+            LOGIN_IP = #{loginIp},
         </if>
         UPDATE_TIME = #{updateTime}
         where ID = #{id};
@@ -150,7 +164,7 @@
             and id != #{userId}
         </if>
     </select>
-    <select id="getImageList" resultType="com.example.demo.business.user.entity.Image">
+    <select id="getImageList" resultMap="imgMap">
         select *from image where
         1 = 1
         <if test="userId != null">

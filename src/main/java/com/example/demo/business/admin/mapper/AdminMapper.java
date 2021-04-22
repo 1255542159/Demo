@@ -1,5 +1,6 @@
 package com.example.demo.business.admin.mapper;
 
+import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.entity.Role;
 import com.example.demo.business.user.entity.RoleMenu;
 import com.example.demo.business.user.entity.UserVo;
@@ -7,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,5 +27,13 @@ public interface AdminMapper {
     List<Role> roleList();
 
     List<UserVo> getList();
+
+    int updateCarousel(Image image);
+
+    int deleteCarousel(String id);
+
+    int getActivityCount();
+
+    HashMap<String, Object> loginLog(String id);
 
 }

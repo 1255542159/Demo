@@ -3,6 +3,7 @@ package com.example.demo.business.user.controller;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
+import com.example.demo.business.user.entity.UserVo;
 import com.example.demo.business.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,16 @@ public class UserController {
         User user = (User) authentication.getPrincipal();
         user.setPassword("");
         return ResponseVo.SUCCESS().setData(user);
+    }
+
+    /**
+     * 用户注册
+     * @param user
+     * @return
+     */
+    @PostMapping("/register")
+    public ResponseVo register(@RequestBody User user){
+        return userService.save(user);
     }
 
     /**
@@ -119,9 +130,47 @@ public class UserController {
     }
 
 
-    @PostMapping("/audit/join")
-    public ResponseVo auditJoin(@RequestBody Audit audit){
-        return userService.auditJoin(audit);
+    /**
+     * 入团申请
+     * @param audit
+     * @return
+     */
+    @PostMapping("/apply/join")
+    public ResponseVo applyJoin(@RequestBody Audit audit){
+        return userService.applyJoin(audit);
     }
 
+    /**
+     * 退团申请
+     * @param audit
+     * @return
+     */
+    @PostMapping("/apply/quit")
+    public ResponseVo applyQuit(@RequestBody Audit audit){
+        return userService.applyQuit(audit);
+    }
+
+
+    /**
+     * 请假申请
+     * @param audit
+     * @return
+     */
+    @PostMapping("/apply/leave")
+    public ResponseVo applyLeave(@RequestBody Audit audit){
+        return userService.applyLeave(audit);
+    }
+
+
+    @GetMapping("/apply/list/{page}/{size}")
+    public ResponseVo applyList(@PathVariable(value = "page", required = false) int page,
+                                @PathVariable(value = "size", required = false) int size){
+            return userService.applyList(page,size);
+    }
+
+
+    @PostMapping("/apply/delete/{id}")
+    public ResponseVo applyDelete(@PathVariable(value = "id", required = false) String id){
+        return userService.applyDelete(id);
+    }
 }

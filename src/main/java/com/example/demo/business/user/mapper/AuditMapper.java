@@ -1,8 +1,11 @@
 package com.example.demo.business.user.mapper;
 
+import com.example.demo.base.BaseMapper;
 import com.example.demo.business.user.entity.Audit;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author joy
@@ -11,7 +14,15 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface AuditMapper {
+public interface AuditMapper{
 
     int save(Audit audit);
+
+    List<Audit> list(String userId);
+
+    int remove(String id);
+
+    int update(Audit audit);
+
+    List<Audit> getAuditList(String id, String type);
 }

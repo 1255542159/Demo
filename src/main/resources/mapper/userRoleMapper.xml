@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.demo.business.user.mapper.UserRoleMapper">
+    <insert id="save">
+        insert into user_role(ID,USER_ID,ROLE_ID) values (#{id},#{userId},#{roleId})
+    </insert>
+
     <update id="updateUserRole">
         update user_role set
         ROLE_ID = #{roleId}
