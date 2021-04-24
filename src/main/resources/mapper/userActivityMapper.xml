@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.user.mapper.UserActivityMapper">
+    <resultMap id="baseMap" type="com.example.demo.business.user.entity.UserActivity">
+        <id column="ID" property="id"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="ACTIVITY_ID" property="activityId"/>
+    </resultMap>
+    <sql id="baseSelect">
+        ID,USER_ID,ACTIVITY_ID
+    </sql>
+
+    <insert id="save" parameterType="com.example.demo.business.user.entity.UserActivity">
+        insert into user_activity(ID,USER_ID,ACTIVITY_ID)values (#{id},#{userId},#{activityId})
+    </insert>
+    <select id="findById" resultMap="baseMap">
+        select
+        ID,USER_ID,ACTIVITY_ID
+        from user_activity where 1=1 and ACTIVITY_ID = #{activityId} and USER_ID=#{userId}
+    </select>
+
+</mapper>

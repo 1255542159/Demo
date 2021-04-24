@@ -4,11 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.entity.Club;
 import com.example.demo.business.user.entity.*;
-import com.example.demo.business.user.mapper.AuditMapper;
-import com.example.demo.business.user.mapper.ImageMapper;
-import com.example.demo.business.user.mapper.UserRoleMapper;
+import com.example.demo.business.user.mapper.*;
 import com.example.demo.business.user.service.UserService;
-import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.utils.Constants;
 import com.example.demo.utils.SnowflakeIdWorker;
 import com.example.demo.utils.Tools;
@@ -60,6 +57,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    private UserActivityMapper userActivityMapper;
     @Autowired
     private AuditMapper auditMapper;
 
@@ -303,6 +302,28 @@ public class UserServiceImpl implements UserService {
         return ResponseVo.SUCCESS().setMsg("删除成功");
     }
 
+    @Override
+    public ResponseVo applyActivity(String activityId) {
+        User currentUser = Tools.getCurrentUser();
+        if(currentUser == null){
+            return ResponseVo.FAILURE().setMsg("请登陆后操作");
+        }
+        //是否已经加入了该活动
+        UserActivity byId = userActivityMapper.findById(currentUser.getId(),activityId);
+        if(byId == null){
+            return ResponseVo.FAILURE().setMsg("请登陆后操作");
+        }
+        UserActivity userActivity = new UserActivity();
+        userActivity.setId(String.valueOf(idWorker.nextId()));
+        userActivity.setUserId(currentUser.getId());
+        userActivity.setActivityId(activityId);
+        int save = userActivityMapper.save(userActivity);
+        if (save != 1) {
+            return ResponseVo.FAILURE().setMsg("加入失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("加入成功");
+    }
+
     private List<Menu> getChild(String id, List<Menu> menuList) {
         //子菜单
         List<Menu> childMenu = new ArrayList<>();
@@ -317,6 +338,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public ResponseVo save(User entity) {
+        //数据校验
+        if(!Tools.isChinaPhoneLegal(entity.getPhone())){
+            return ResponseVo.FAILURE().setMsg("手机号不合法");
+        }
+        if(entity.getSno().length() != 11){
+            return ResponseVo.FAILURE().setMsg("学号不合法");
+        }
         //先去查询当前是否存在该账户
         User userByPhone = userMapper.findUserByPhone(entity.getPhone());
         if (userByPhone != null){
@@ -343,6 +371,8 @@ public class UserServiceImpl implements UserService {
         }
         return ResponseVo.SUCCESS().setMsg("添加成功");
     }
+
+
 
     @Override
     public ResponseVo remove(String id) {

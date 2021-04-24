@@ -85,4 +85,11 @@ public interface UserService extends UserDetailsService, BaseService<User> {
      * @return
      */
     ResponseVo applyDelete(String id);
+
+    /**
+     * 根据id申请加入活动
+     * @param activityId
+     * @return
+     */
+    ResponseVo applyActivity(String activityId);
 }

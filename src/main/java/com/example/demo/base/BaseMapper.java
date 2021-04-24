@@ -34,12 +34,6 @@ public interface BaseMapper<T> {
      */
     int update(T entity);
 
-    /**
-     * 根据id查找
-     * @param id
-     * @return
-     */
-    T findById(Serializable id);
 
     /**
      * 查询所有

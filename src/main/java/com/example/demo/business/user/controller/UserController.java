@@ -151,14 +151,24 @@ public class UserController {
     }
 
 
+        /**
+         * 请假申请
+         * @param audit
+         * @return
+         */
+        @PostMapping("/apply/leave")
+        public ResponseVo applyLeave(@RequestBody Audit audit){
+            return userService.applyLeave(audit);
+        }
+
     /**
-     * 请假申请
-     * @param audit
+     * 活动申请
+     * @param activityId
      * @return
      */
-    @PostMapping("/apply/leave")
-    public ResponseVo applyLeave(@RequestBody Audit audit){
-        return userService.applyLeave(audit);
+    @GetMapping("/apply/activity/{activityId}")
+    public ResponseVo applyActivity(@PathVariable(value = "activityId") String activityId){
+        return userService.applyActivity(activityId);
     }
 
 
