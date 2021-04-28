@@ -18,8 +18,8 @@ pagehelper:
 qiniu:
   accessKey: ygdIFwQ3td8D5occ_MXOBp8ToO5HuNYnubaZYsEk
   secretKey: 5F21zs3od_C_w8oSB8gYW1vehwVO_4IP9JDYoRbC
-  buckName: cms-test2021
-  qiniuDomin: qqtd105ll.hn-bkt.clouddn.com
+  buckName: club123
+  qiniuDomin: qs2v7hpuf.hn-bkt.clouddn.com
 server:
   port: 2020
 

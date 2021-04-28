@@ -44,24 +44,43 @@
         #{clubImg},
         #{isDelete},
         #{createTime},
-        #{updateTime},
+        now(),
         #{status}
         )
     </insert>
     <update id="update">
         update club
         set
-        CLUB_NAME = #{clubName},
-        CLUB_CREATOR = #{clubCreator},
-        LEADER_ID = #{leaderId},
-        CLUB_INTRODUCE = #{clubIntroduce},
-        CLUB_DESC = #{clubDesc},
-        CLUB_IMG = #{clubImg},
-        UPDATE_TIME = #{updateTime},
-        IS_DELETE = #{isDelete},
-        STATUS = #{status}
-        where
-        ID = #{id}
+        <if test="club.clubName != null">
+            CLUB_NAME = #{club.clubName},
+        </if>
+        <if test="club.clubCreator != null">
+        CLUB_CREATOR = #{club.clubCreator},
+        </if>
+        <if test="club.leaderId != null">
+            LEADER_ID = #{club.leaderId},
+        </if>
+        <if test="club.clubIntroduce != null">
+            CLUB_INTRODUCE = #{club.clubIntroduce},
+        </if>
+        <if test="club.clubDesc != null">
+            CLUB_DESC = #{club.clubDesc},
+        </if>
+        <if test="club.clubImg != null">
+            CLUB_IMG = #{club.clubImg},
+        </if>
+            UPDATE_TIME = now(),
+        <if test="club.isDelete != null">
+            IS_DELETE = #{club.isDelete},
+        </if>
+        <if test="club.status != null">
+            STATUS = #{club.status}
+        </if>
+        where 1=1
+        <if test="club.id != null">
+            and ID = #{club.id}
+        </if>
+
     </update>
     <delete id="remove">
     delete from club where ID = #{id}

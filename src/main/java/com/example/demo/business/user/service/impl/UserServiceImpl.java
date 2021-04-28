@@ -3,6 +3,7 @@ package com.example.demo.business.user.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.admin.entity.Club;
+import com.example.demo.business.admin.mapper.ClubMapper;
 import com.example.demo.business.user.entity.*;
 import com.example.demo.business.user.mapper.*;
 import com.example.demo.business.user.service.UserService;
@@ -48,6 +49,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
+    @Autowired
+    private ClubMapper clubMapper;
     @Autowired
     private SnowflakeIdWorker idWorker;
     @Autowired
@@ -111,7 +114,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userMapper.findUserByPhone(s);
-        if (user == null) {
+        if (Objects.isNull(user)) {
             throw new UsernameNotFoundException("用户不存在");
         }
         return user;
@@ -227,8 +230,9 @@ public class UserServiceImpl implements UserService {
             //更新
             audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
             audit.setUpdateTime(new Date());
-            int save = auditMapper.update(audit);
-            if(save != 1){
+            boolean success = auditMapper.update(audit) == 1;
+            if(!success){
+                log.error("applyJoin: update audit failed data={}",audit);
                 return ResponseVo.FAILURE().setMsg("更新失败");
             }
         }else {
@@ -239,13 +243,13 @@ public class UserServiceImpl implements UserService {
                 audit.setId(String.valueOf(idWorker.nextId()));
                 audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
                 audit.setCreateTime(new Date());
-                int res = auditMapper.save(audit);
-                if(res != 1){
+               boolean success = auditMapper.save(audit) == 1;
+                if(!success){
+                    log.error("applyJoin: save audit failed data={}",audit);
                     return ResponseVo.FAILURE().setMsg("申请失败");
                 }
             }
         }
-
         return ResponseVo.SUCCESS().setMsg("更新成功");
     }
 
@@ -263,8 +267,9 @@ public class UserServiceImpl implements UserService {
             audit.setId(String.valueOf(idWorker.nextId()));
             audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
             audit.setCreateTime(new Date());
-            int save = auditMapper.save(audit);
-            if(save != 1){
+            boolean success = auditMapper.save(audit) == 1;
+            if(!success){
+                log.error("applyQuit: save audit failed data={}",audit);
                 return ResponseVo.FAILURE().setMsg("申请失败");
             }
         }
@@ -278,8 +283,9 @@ public class UserServiceImpl implements UserService {
             audit.setId(String.valueOf(idWorker.nextId()));
             audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
             audit.setCreateTime(new Date());
-            int res = auditMapper.save(audit);
-            if(res != 1){
+            boolean success = auditMapper.save(audit) == 1;
+            if(!success){
+                log.error("applyLeave: save audit failed data={}",audit);
                 return ResponseVo.FAILURE().setMsg("申请失败");
             }
         return ResponseVo.SUCCESS().setMsg("申请成功");
@@ -295,8 +301,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseVo applyDelete(String id) {
-        int remove = auditMapper.remove(id);
-        if (remove != 1) {
+        boolean success = auditMapper.remove(id) == 1;
+        if (!success) {
+            log.error("applyDelete: remove apply failed data={}",id);
             return ResponseVo.FAILURE().setMsg("删除失败");
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
@@ -305,20 +312,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseVo applyActivity(String activityId) {
         User currentUser = Tools.getCurrentUser();
-        if(currentUser == null){
+        if(Objects.isNull(currentUser)){
             return ResponseVo.FAILURE().setMsg("请登陆后操作");
         }
         //是否已经加入了该活动
         UserActivity byId = userActivityMapper.findById(currentUser.getId(),activityId);
-        if(byId == null){
+        if(Objects.isNull(byId)){
             return ResponseVo.FAILURE().setMsg("请登陆后操作");
         }
         UserActivity userActivity = new UserActivity();
         userActivity.setId(String.valueOf(idWorker.nextId()));
         userActivity.setUserId(currentUser.getId());
         userActivity.setActivityId(activityId);
-        int save = userActivityMapper.save(userActivity);
-        if (save != 1) {
+        boolean success = userActivityMapper.save(userActivity) == 1;
+        if (!success) {
+            log.error("applyActivity: save userActivity failed data={}",userActivity);
             return ResponseVo.FAILURE().setMsg("加入失败");
         }
         return ResponseVo.SUCCESS().setMsg("加入成功");
@@ -347,7 +355,7 @@ public class UserServiceImpl implements UserService {
         }
         //先去查询当前是否存在该账户
         User userByPhone = userMapper.findUserByPhone(entity.getPhone());
-        if (userByPhone != null){
+        if (!Objects.isNull(userByPhone)){
             return ResponseVo.FAILURE().setMsg("该用户已存在");
         }else {
             if (entity.getAvatar() == null || entity.getAvatar().equals("")) {
@@ -358,14 +366,19 @@ public class UserServiceImpl implements UserService {
             entity.setId(String.valueOf(idWorker.nextId()));
             entity.setRegIp(request.getRemoteAddr());
             entity.setStatus(0);
-            int save = userMapper.save(entity);
+            boolean success = userMapper.save(entity) == 1;
+            if (!success){
+                log.error("saveUser: save user failed data={}",entity);
+                return ResponseVo.FAILURE().setMsg("添加失败");
+            }
             //设置当前用户的角色为普通用户
             UserRole userRole = new UserRole();
             userRole.setId(String.valueOf(idWorker.nextId()));
             userRole.setUserId(entity.getId());
             userRole.setRoleId(Constants.RoleId.ROLE_USER);
-            int res = userRoleMapper.save(userRole);
-            if (save != 1) {
+            boolean res = userRoleMapper.save(userRole) == 1;
+            if (!res){
+                log.error("saveUserRole: save userRole failed data={}",entity);
                 return ResponseVo.FAILURE().setMsg("添加失败");
             }
         }
@@ -376,9 +389,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseVo remove(String id) {
-        int remove = userMapper.remove(id);
-        if (remove != 1) {
-            return ResponseVo.FAILURE();
+        boolean success = userMapper.remove(id) == 1;
+        if (!success) {
+            log.error("removeUser: remove user failed data={}",id);
+            return ResponseVo.FAILURE().setMsg("删除失败");
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
     }
@@ -386,9 +400,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseVo update(User entity) {
         entity.setUpdateTime(new Date());
-        int update = userMapper.update(entity);
-        if (update != 1) {
-            return ResponseVo.FAILURE();
+        boolean update = userMapper.update(entity) == 1;
+        if(!update){
+            log.error("updateUser: update user failed data={}",entity);
+            return ResponseVo.FAILURE().setMsg("更新失败");
         }
         return ResponseVo.SUCCESS().setMsg("更新成功");
     }

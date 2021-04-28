@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * @author joy
  * @version 1.0
@@ -70,13 +72,14 @@ public class ClubServiceImpl implements ClubService {
         if(!entity.getId().equals("")){
             entity.setUpdateTime(new Date());
             entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
-            int update = clubMapper.update(entity);
-            if (update != 1) {
+           boolean success  = clubMapper.update(entity) == 1;
+            if (!success) {
+                log.error("clubUpdate: update club failed data={}",entity);
                 return ResponseVo.FAILURE().setMsg("更新失败");
             }
             return ResponseVo.SUCCESS().setMsg("更新成功");
         } else {
-            if(club != null){
+            if(!Objects.isNull(club)){
                 return ResponseVo.FAILURE().setMsg("该社团已存在");
             }
             User currentUser = Tools.getCurrentUser();
@@ -85,8 +88,9 @@ public class ClubServiceImpl implements ClubService {
             entity.setId(String.valueOf(idWorker.nextId()));
             entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
             entity.setCreateTime(new Date());
-            int save = clubMapper.save(entity);
-            if (save != 1) {
+            boolean success = clubMapper.save(entity) == 1;
+            if (!success) {
+                log.error("clubSave: save club failed data={}",entity);
                 return ResponseVo.FAILURE().setMsg("保存失败");
             }
         }
@@ -95,8 +99,9 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseVo remove(String id) {
-        int remove = clubMapper.remove(id);
-        if (remove != 1) {
+        boolean success = clubMapper.remove(id) == 1;
+        if (!success) {
+            log.error("clubRemove: remove club failed data={}",id);
             return ResponseVo.FAILURE().setMsg("删除失败");
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
@@ -105,8 +110,10 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public ResponseVo update(Club entity) {
         entity.setUpdateTime(new Date());
-        int update = clubMapper.update(entity);
-        if (update != 1) {
+        boolean success = clubMapper.update(entity) == 1;
+
+        if (!success) {
+            log.error("clubUpdate: update club failed data={}",entity);
             return ResponseVo.FAILURE().setMsg("更新失败");
         }
         return ResponseVo.SUCCESS().setMsg("更新成功");
@@ -153,8 +160,9 @@ public class ClubServiceImpl implements ClubService {
             user.setClubId(audit.getClubId());
             userMapper.update(user);
         }
-        int update = auditMapper.update(audit);
-        if (update != 1) {
+        boolean success = auditMapper.update(audit) == 1;
+        if (!success) {
+            log.error("auditUpdate: update audit failed data={}",audit);
             return ResponseVo.FAILURE().setMsg("审核失败");
         }
         return ResponseVo.SUCCESS().setMsg("审核成功");

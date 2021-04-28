@@ -12,6 +12,7 @@ import com.example.demo.utils.Tools;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/10/3 16:56
  */
+@Slf4j
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -48,22 +50,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseVo getUserCount() {
-        try {
-            int userCount = adminMapper.getUserCount();
-            return ResponseVo.SUCCESS().setData(userCount);
-        } catch (Exception e) {
-            return ResponseVo.FAILURE();
-        }
+        int userCount = adminMapper.getUserCount();
+        return ResponseVo.SUCCESS().setData(userCount);
     }
 
     @Override
     public ResponseVo getClubCount() {
-        try {
-            int clubCount = adminMapper.getClubCount();
-            return ResponseVo.SUCCESS().setData(clubCount);
-        } catch (Exception e) {
-            return ResponseVo.FAILURE();
-        }
+        int clubCount = adminMapper.getClubCount();
+        return ResponseVo.SUCCESS().setData(clubCount);
     }
 
     @Override
@@ -101,13 +95,18 @@ public class AdminServiceImpl implements AdminService {
             roleMenu.setMenuId(split[i]);
             roleMenus.add(roleMenu);
         }
-        try {
-            //在创建前先将原来的清空
-            int res = roleMenuMapper.delete(roleId);
-            roleMenuMapper.saveRoleMenu(roleMenus);
-        } catch (Exception e) {
-            return ResponseVo.FAILURE().setMsg("分配失败");
+        //在创建前先将原来的清空
+        boolean delete = roleMenuMapper.delete(roleId) == 1;
+        if (!delete) {
+            log.error("deleteRoleMenu: delete roleMenu failed data={}", roleId);
+            return ResponseVo.FAILURE().setMsg("删除失败");
         }
+        boolean success = roleMenuMapper.saveRoleMenu(roleMenus) == 1;
+        if (!success) {
+            log.error("saveRoleMenu: save roleMenu failed data={}", roleMenus);
+            return ResponseVo.FAILURE().setMsg("保存失败");
+        }
+
         return ResponseVo.SUCCESS().setMsg("分配成功");
     }
 
@@ -123,12 +122,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseVo issueRole(String userId, String roleId) {
-        try {
-            int i = userRoleMapper.updateUserRole(userId, roleId);
-            if( i != 1){
-                return ResponseVo.FAILURE().setMsg("分配失败");
-            }
-        } catch (Exception e) {
+        boolean success = userRoleMapper.updateUserRole(userId, roleId) == 1;
+        if (!success) {
+            log.error("updateCarousel: update carousel failed data={}", userId, roleId);
             return ResponseVo.FAILURE().setMsg("分配失败");
         }
         return ResponseVo.SUCCESS().setMsg("分配成功");
@@ -136,13 +132,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseVo updateCarousel(Image image) {
-
-        try {
-            int i = adminMapper.updateCarousel(image);
-            if( i != 1){
-                return ResponseVo.FAILURE().setMsg("修改失败");
-            }
-        } catch (Exception e) {
+        boolean success = adminMapper.updateCarousel(image) == 1;
+        if (!success) {
+            log.error("updateCarousel: update carousel failed data={}", image);
             return ResponseVo.FAILURE().setMsg("修改失败");
         }
         return ResponseVo.SUCCESS().setMsg("修改成功");
@@ -150,12 +142,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseVo deleteCarousel(String id) {
-        try {
-            int i = adminMapper.deleteCarousel(id);
-            if( i != 1){
-                return ResponseVo.FAILURE().setMsg("修改失败");
-            }
-        } catch (Exception e) {
+        boolean success = adminMapper.deleteCarousel(id) == 1;
+        if (!success) {
+            log.error("deleteCarousel: delete carousel failed data={}", id);
             return ResponseVo.FAILURE().setMsg("修改失败");
         }
         return ResponseVo.SUCCESS().setMsg("修改成功");
@@ -163,25 +152,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseVo getActivityCount() {
-        try {
-            int activityCount = adminMapper.getActivityCount();
-            return ResponseVo.SUCCESS().setData(activityCount);
-        } catch (Exception e) {
-            return ResponseVo.FAILURE();
-        }
+        int activityCount = adminMapper.getActivityCount();
+        return ResponseVo.SUCCESS().setData(activityCount);
     }
 
     @Override
     public ResponseVo loginLog() {
-        try {
-            User currentUser = Tools.getCurrentUser();
-
-            HashMap<String, Object> data = adminMapper.loginLog(currentUser.getId());
-            return ResponseVo.SUCCESS().setData(data);
-        } catch (Exception e) {
-            return ResponseVo.FAILURE();
-        }
+        User currentUser = Tools.getCurrentUser();
+        HashMap<String, Object> data = adminMapper.loginLog(currentUser.getId());
+        return ResponseVo.SUCCESS().setData(data);
     }
-
 
 }

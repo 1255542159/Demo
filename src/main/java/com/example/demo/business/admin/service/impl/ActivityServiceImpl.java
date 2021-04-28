@@ -39,9 +39,10 @@ public class ActivityServiceImpl implements ActivityService {
         if(!entity.getId().equals("")){
             entity.setUpdateTime(new Date());
             entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
-            int update = activityMapper.update(entity);
-            if (update != 1) {
-                return ResponseVo.FAILURE();
+            boolean success = activityMapper.update(entity) == 1;
+            if (!success) {
+                log.error("ActivityUpdate: update activity failed data={}",entity);
+                return ResponseVo.FAILURE().setMsg("更新失败");
             }
             return ResponseVo.SUCCESS().setMsg("更新成功");
         }else {
@@ -59,8 +60,9 @@ public class ActivityServiceImpl implements ActivityService {
                 entity.setJoinCount(0);
                 entity.setIsDelete(0);
                 entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
-                int save = activityMapper.save(entity);
-                if (save != 1) {
+                boolean success = activityMapper.save(entity) == 1;
+                if (!success) {
+                    log.error("ActivitySave: save activity failed data={}",entity);
                     return ResponseVo.FAILURE().setMsg("发布失败");
                 }
             }
@@ -70,8 +72,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public ResponseVo remove(String id) {
-        int remove = activityMapper.remove(id);
-        if (remove != 1) {
+        boolean success = activityMapper.remove(id) == 1;
+        if (!success) {
+            log.error("ActivityRemove: remove activity failed data={}",id);
             return ResponseVo.FAILURE();
         }
         return ResponseVo.SUCCESS().setMsg("删除成功");
@@ -80,8 +83,9 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ResponseVo update(Activity entity) {
         entity.setUpdateTime(new Date());
-        int update = activityMapper.update(entity);
-        if (update != 1) {
+        boolean success = activityMapper.update(entity) == 1;
+        if (!success) {
+            log.error("ActivityUpdate: update activity failed data={}",entity);
             return ResponseVo.FAILURE().setMsg("审核失败");
         }
         return ResponseVo.SUCCESS().setMsg("审核成功");

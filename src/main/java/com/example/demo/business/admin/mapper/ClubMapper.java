@@ -5,7 +5,9 @@ import com.example.demo.base.BaseMapper;
 import com.example.demo.business.admin.entity.Activity;
 import com.example.demo.business.admin.entity.Club;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -40,7 +42,7 @@ public interface ClubMapper extends BaseMapper<Club> {
      * @return
      */
     @Override
-    int update(Club entity);
+    int update(@Param("club") Club entity);
 
     /**
      * 通过社团id查找社团

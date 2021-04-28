@@ -9,6 +9,7 @@ import com.example.demo.business.portal.service.PortalService;
 import com.example.demo.business.user.entity.UserVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.util.List;
  * @version 1.0
  * @date 2021/3/19 13:24
  */
+@Slf4j
 @Service
 public class PortalServiceImpl implements PortalService {
     @Autowired
@@ -46,15 +48,15 @@ public class PortalServiceImpl implements PortalService {
     @Transactional
     @Override
     public ResponseVo getDetails(String id) {
-        try {
             //更新浏览量
-            int res = activityMapper.updateViewCountById(id);
+            boolean success = activityMapper.updateViewCountById(id) == 1;
+            if (!success){
+                log.error("getDetails: update viewCountById failed data={}",id);
+                return ResponseVo.FAILURE();
+            }
             HashMap<String,Object> data = portalMapper.getDetails(id);
             return ResponseVo.SUCCESS().setData(data);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseVo.FAILURE();
-        }
+
 
     }
 
@@ -68,23 +70,13 @@ public class PortalServiceImpl implements PortalService {
 
     @Override
     public ResponseVo getClubDetail(String id) {
-        try {
             HashMap<String,Object> data = portalMapper.getClubDetail(id);
             return ResponseVo.SUCCESS().setData(data);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseVo.FAILURE();
-        }
     }
 
     @Override
     public ResponseVo getActivityUserInfo(String id) {
-        try {
             UserVo data = portalMapper.getActivityUserInfo(id);
             return ResponseVo.SUCCESS().setData(data);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseVo.FAILURE();
-        }
     }
 }
