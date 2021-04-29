@@ -183,4 +183,11 @@ public class UserController {
     public ResponseVo applyDelete(@PathVariable(value = "id", required = false) String id){
         return userService.applyDelete(id);
     }
+
+    @GetMapping("/system/msg")
+    public ResponseVo getActivityInfo(){
+        return userService.getActivityInfo();
+    }
+
+
 }

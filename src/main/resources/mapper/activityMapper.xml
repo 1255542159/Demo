@@ -61,20 +61,46 @@
         <update id="update">
             update activity
             set
-            TITLE = #{title},
-            SUMMARY = #{summary},
-            CONTENT = #{content},
-            START_TIME = #{startTime},
-            END_TIME = #{endTime},
-            SPONSOR_ID = #{sponsorId},
-            ACTIVITY_IMG = #{activityImg},
-            IS_DELETE = #{isDelete},
-            CREATE_TIME = #{createTime},
-            UPDATE_TIME = #{updateTime},
-            STATUS = #{status},
-            CLUB_ID = #{clubId},
-            VIEW_COUNT = #{viewCount},
-            JOIN_COUNT = #{joinCount}
+            <if test="title != null">
+                TITLE = #{title},
+            </if>
+            <if test="summary != null">
+                SUMMARY = #{summary},
+            </if>
+            <if test="content">
+                CONTENT = #{content},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime},
+            </if>
+            <if test="sponsorId != null">
+                SPONSOR_ID = #{sponsorId},
+            </if>
+            <if test="activityImg != null">
+                ACTIVITY_IMG = #{activityImg},
+            </if>
+            <if test="isDelete != null">
+                IS_DELETE = #{isDelete},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime},
+            </if>
+            <if test="status != null">
+                STATUS = #{status},
+            </if>
+            <if test="clubId != null">
+                CLUB_ID = #{clubId},
+            </if>
+            <if test="viewCount != null">
+                VIEW_COUNT = #{viewCount},
+            </if>
+            <if test="joinCount != null">
+                JOIN_COUNT = #{joinCount}
+            </if>
+            UPDATE_TIME = now(),
             where ID = #{id}
         </update>
     <update id="updateViewCountById">
@@ -96,6 +122,15 @@
             and STATUS = #{status}
         </if>
         ORDER BY UPDATE_TIME desc
+    </select>
+    <select id="findByClubId"
+    resultMap="baseMap">
+        select * from activity where 1 = 1
+        <if test="clubId != null">
+        and  CLUB_ID = #{clubId}
+        </if>
+        and STATUS = 1
+        and END_TIME >= now()
     </select>
 
 

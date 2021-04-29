@@ -92,4 +92,11 @@ public interface UserService extends UserDetailsService, BaseService<User> {
      * @return
      */
     ResponseVo applyActivity(String activityId);
+
+    /**
+     * 获取活动通知
+     * @return
+     */
+    ResponseVo getActivityInfo();
+
 }

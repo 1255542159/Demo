@@ -2,7 +2,9 @@ package com.example.demo.business.user.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.admin.entity.Activity;
 import com.example.demo.business.admin.entity.Club;
+import com.example.demo.business.admin.mapper.ActivityMapper;
 import com.example.demo.business.admin.mapper.ClubMapper;
 import com.example.demo.business.user.entity.*;
 import com.example.demo.business.user.mapper.*;
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
     private ImageMapper imageMapper;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private ActivityMapper activityMapper;
 
     @Autowired
     private UserActivityMapper userActivityMapper;
@@ -399,7 +403,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseVo update(User entity) {
-        entity.setUpdateTime(new Date());
         boolean update = userMapper.update(entity) == 1;
         if(!update){
             log.error("updateUser: update user failed data={}",entity);
@@ -432,5 +435,17 @@ public class UserServiceImpl implements UserService {
         }
         PageInfo<UserVo> userPageInfo = new PageInfo<>(all);
         return ResponseVo.SUCCESS().setData(userPageInfo);
+    }
+
+    @Override
+    public ResponseVo getActivityInfo() {
+        //获取当前用户
+        User currentUser = Tools.getCurrentUser();
+        List<Activity> byClubId = activityMapper.findByClubId(currentUser.getClubId());
+        if(Objects.isNull(byClubId)){
+            log.error("getActivityInfo: get Info failed data={}",currentUser.getClubId());
+            return ResponseVo.FAILURE().setMsg("获取失败");
+        }
+        return ResponseVo.SUCCESS().setData(byClubId);
     }
 }

@@ -4,6 +4,7 @@ package com.example.demo.business.admin.mapper;
 import com.example.demo.base.BaseMapper;
 import com.example.demo.business.admin.entity.Activity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,4 +54,6 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * @return
      */
     int updateViewCountById(String id);
+
+    List<Activity> findByClubId(@Param("clubId") String clubId);
 }

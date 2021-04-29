@@ -116,7 +116,7 @@
         <if test="loginIp != null">
             LOGIN_IP = #{loginIp},
         </if>
-        UPDATE_TIME = #{updateTime}
+        UPDATE_TIME = now()
         where ID = #{id};
     </update>
     <delete id="remove">
