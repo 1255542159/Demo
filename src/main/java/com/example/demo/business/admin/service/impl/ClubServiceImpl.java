@@ -16,6 +16,8 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.tools.Tool;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +65,12 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseVo save(Club entity) {
-        System.out.println(entity);
+        User currentUser = Tools.getCurrentUser();
+        //判断该用户是否已经提交了创建
+        Club cl = clubMapper.getClubByUserId(currentUser.getId());
+        if(!Objects.isNull(cl)){
+            return ResponseVo.FAILURE().setMsg("你已提交申请");
+        }
         //判断当前社团是否已存在
         Club club = clubMapper.findClubByName(entity.getClubName());
         if(entity.getId() == null){
@@ -82,7 +89,7 @@ public class ClubServiceImpl implements ClubService {
             if(!Objects.isNull(club)){
                 return ResponseVo.FAILURE().setMsg("该社团已存在");
             }
-            User currentUser = Tools.getCurrentUser();
+
             entity.setLeaderId(currentUser.getId());
             entity.setClubCreator(currentUser.getName());
             entity.setId(String.valueOf(idWorker.nextId()));
@@ -109,9 +116,12 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseVo update(Club entity) {
-        entity.setUpdateTime(new Date());
-        boolean success = clubMapper.update(entity) == 1;
-
+        boolean success;
+        success = clubMapper.update(entity) == 1;
+        User user = new User();
+        user.setId(entity.getLeaderId());
+        user.setClubId(entity.getId());
+        success = success && userMapper.update(user) == 1;
         if (!success) {
             log.error("clubUpdate: update club failed data={}",entity);
             return ResponseVo.FAILURE().setMsg("更新失败");

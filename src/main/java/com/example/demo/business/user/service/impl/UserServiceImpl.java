@@ -116,9 +116,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String s){
         User user = userMapper.findUserByPhone(s);
-        if (Objects.isNull(user)) {
+        try{
+            if (Objects.isNull(user)) {
+                //捕获异常
+                return null;
+            }
+        }catch (UsernameNotFoundException e){
             throw new UsernameNotFoundException("用户不存在");
         }
         return user;
@@ -241,8 +246,8 @@ public class UserServiceImpl implements UserService {
             }
         }else {
             //先查询当前用户是否已存在社团，若存在则提示退出当前社团
-            if(!currentUser.getClubId().equals("0")){
-                return ResponseVo.FAILURE().setMsg("若要申请入社，请退出当前社团!");
+            if(Objects.isNull(currentUser.getClubId())){
+                return ResponseVo.FAILURE().setMsg("请先申请入社!");
             }else {
                 audit.setId(String.valueOf(idWorker.nextId()));
                 audit.setStatus(Constants.ActivityStatus.TO_AUDIT);
@@ -417,13 +422,14 @@ public class UserServiceImpl implements UserService {
         User principal = (User) authentication.getPrincipal();
         PageHelper.startPage(page, size);
         String userId = principal.getId();
-        Long clubId = Long.valueOf(principal.getClubId());
+        List<UserVo> all;
         //如果是超级管理员，则可以查看全部的用户信息
         if (principal.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)) {
-            clubId = null;
+            all = userMapper.selectAll();
+        }else {
+            //查询当前用户创建的社团下的成员列表
+           all = userMapper.getListByClubId(userId, principal.getClubId());
         }
-        //查询当前用户创建的社团下的成员列表
-        List<UserVo> all = userMapper.getListByClubId(userId, clubId);
         //如果社团为空
         Iterator<UserVo> iterator = all.iterator();
         while (iterator.hasNext()) {

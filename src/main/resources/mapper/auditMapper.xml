@@ -61,9 +61,9 @@
         <if test="type != null">
             and a.TYPE  = #{type}
         </if>
-        <if test="id != null">
-            and c.LEADER_ID = #{id}
-        </if>
+<!--        <if test="id != null">-->
+<!--            and c.LEADER_ID = #{id}-->
+<!--        </if>-->
     </select>
 
 </mapper>

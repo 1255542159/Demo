@@ -49,7 +49,9 @@ public interface UserMapper extends BaseMapper<User> {
      * @param clubId
      * @return
      */
-    List<UserVo> getListByClubId(String userId, Long clubId);
+    List<UserVo> getListByClubId(String userId, String clubId);
+
+    List<UserVo> selectAll();
 
     /**
      * 更新用户信息

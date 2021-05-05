@@ -56,4 +56,6 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     int updateViewCountById(String id);
 
     List<Activity> findByClubId(@Param("clubId") String clubId);
+
+    List<Activity> selectHotActivity();
 }

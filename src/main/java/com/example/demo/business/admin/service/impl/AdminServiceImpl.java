@@ -97,15 +97,15 @@ public class AdminServiceImpl implements AdminService {
         }
         //在创建前先将原来的清空
         boolean delete = roleMenuMapper.delete(roleId) == 1;
-        if (!delete) {
-            log.error("deleteRoleMenu: delete roleMenu failed data={}", roleId);
-            return ResponseVo.FAILURE().setMsg("删除失败");
-        }
-        boolean success = roleMenuMapper.saveRoleMenu(roleMenus) == 1;
-        if (!success) {
-            log.error("saveRoleMenu: save roleMenu failed data={}", roleMenus);
-            return ResponseVo.FAILURE().setMsg("保存失败");
-        }
+//        if (!delete) {
+//            log.error("deleteRoleMenu: delete roleMenu failed data={}", roleId);
+//            return ResponseVo.FAILURE().setMsg("删除失败");
+//        }
+        int success = roleMenuMapper.saveRoleMenu(roleMenus);
+//        if (success != 1) {
+//            log.error("saveRoleMenu: save roleMenu failed data={}", roleMenus);
+//            return ResponseVo.FAILURE().setMsg("保存失败");
+//        }
 
         return ResponseVo.SUCCESS().setMsg("分配成功");
     }

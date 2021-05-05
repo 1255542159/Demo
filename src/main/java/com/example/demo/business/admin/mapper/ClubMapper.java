@@ -62,4 +62,11 @@ public interface ClubMapper extends BaseMapper<Club> {
 
     @Override
     List<Club> findAll();
+
+    /**
+     * 根据用户id查询
+     * @param id
+     * @return
+     */
+    Club getClubByUserId(String id);
 }

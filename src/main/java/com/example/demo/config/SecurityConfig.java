@@ -85,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/uploadImage",
                         "/user/apply/activity/**").permitAll()
                 .antMatchers("/admin/web_site_info/**").permitAll()
+                .antMatchers("/club/list/club").permitAll()
                 .antMatchers("/swagger**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()

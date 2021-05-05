@@ -164,6 +164,15 @@
             and id != #{userId}
         </if>
     </select>
+
+    <select id="selectAll" resultMap="userMap">
+        select
+        ID,`NAME`,SNO,SEX,
+        AVATAR,PHONE,EMAIL,SIGN,STATUS,
+        REG_ID,LOGIN_IP,CLUB_ID,CREATE_TIME,UPDATE_TIME,CLUB_ID
+        from `user`
+        where 1=1
+    </select>
     <select id="getImageList" resultMap="imgMap">
         select *from image where
         1 = 1

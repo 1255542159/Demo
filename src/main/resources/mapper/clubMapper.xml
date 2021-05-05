@@ -122,6 +122,9 @@ ORDER BY c.CREATE_TIME desc
         GROUP BY c.id
         ORDER BY c.CREATE_TIME desc
     </select>
+    <select id="getClubByUserId" resultType="com.example.demo.business.admin.entity.Club">
+        select *from club where LEADER_ID = #{id}
+    </select>
 
 
 </mapper>

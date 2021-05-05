@@ -98,9 +98,9 @@
                 VIEW_COUNT = #{viewCount},
             </if>
             <if test="joinCount != null">
-                JOIN_COUNT = #{joinCount}
+                JOIN_COUNT = #{joinCount},
             </if>
-            UPDATE_TIME = now(),
+            UPDATE_TIME = now()
             where ID = #{id}
         </update>
     <update id="updateViewCountById">
@@ -131,6 +131,10 @@
         </if>
         and STATUS = 1
         and END_TIME >= now()
+    </select>
+    <select id="selectHotActivity" resultMap="baseMap">
+        select *from activity
+            order by view_count desc
     </select>
 
 

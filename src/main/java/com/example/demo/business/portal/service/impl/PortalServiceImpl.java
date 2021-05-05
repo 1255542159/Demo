@@ -41,8 +41,10 @@ public class PortalServiceImpl implements PortalService {
 
     @Override
     public ResponseVo hotActivity(int page, int size) {
-
-        return null;
+        PageHelper.startPage(page,size);
+        List<Activity> activities = activityMapper.selectHotActivity();
+        PageInfo<Activity> activityPageInfo = new PageInfo<>(activities);
+        return ResponseVo.SUCCESS().setData(activityPageInfo);
     }
 
     @Transactional
@@ -56,8 +58,6 @@ public class PortalServiceImpl implements PortalService {
             }
             HashMap<String,Object> data = portalMapper.getDetails(id);
             return ResponseVo.SUCCESS().setData(data);
-
-
     }
 
     @Override
