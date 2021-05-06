@@ -99,7 +99,7 @@
         left join `user` u on u.id = cl.LEADER_ID where cl.`STATUS` =1
     </select>
     <select id="getClubDetail" resultType="java.util.HashMap">
-SELECT cl.CLUB_NAME clubName,
+SELECT cl.CLUB_NAME clubName,cl.LEADER_ID leaderId,
         cl.CLUB_IMG clubImg,cl.CREATE_TIME createTime,cl.CLUB_CREATOR creator,u.NAME name,cl.CLUB_INTRODUCE introduce,cl.CLUB_DESC des
         from `club` cl
         left join `user` u on u.id = cl.LEADER_ID where cl.`STATUS` =1 and cl.id = #{id}

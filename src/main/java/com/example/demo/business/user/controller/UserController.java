@@ -3,16 +3,17 @@ package com.example.demo.business.user.controller;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
-import com.example.demo.business.user.entity.UserVo;
+import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.business.user.service.UserService;
+import com.example.demo.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author joy
@@ -65,7 +66,7 @@ public class UserController {
      * @param file
      * @return
      */
-    @PostMapping("image/uploadImage")
+    @PostMapping("/image/uploadImage")
     public ResponseVo uploadImage(@RequestParam("file") MultipartFile file,
     @RequestParam("original") String original) {
         return userService.uploadImage(file,original);
@@ -96,6 +97,20 @@ public class UserController {
                                     @RequestParam(value = "status",required = false) Integer status,
                                     @RequestParam(value = "keyWords", required = false) String keyWords) {
         return userService.getList(page, size, status,keyWords);
+    }
+
+    @Autowired
+    private UserMapper userMapper;
+
+    /**
+     * 导出excel
+     *
+     * @return
+     */
+    @GetMapping("/export")
+    public void test(HttpServletResponse response) {
+        List<User> all = userMapper.findAll();
+        Tools.exportForExcel(response,all);
     }
 
     /**

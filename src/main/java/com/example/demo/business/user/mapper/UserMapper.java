@@ -87,4 +87,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     List<Image> getImageList(String userId, String original);
+
+    User isExistSno(String sno);
 }

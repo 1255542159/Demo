@@ -1,0 +1,1 @@
+[2021/05/06-00:00:10] [http-nio-2020-exec-6] [ERROR] [com.example.demo.business.admin.service.impl.AdminServiceImpl] : saveRoleMenu: save roleMenu failed data=[RoleMenu(roleId=2, menuId=2), RoleMenu(roleId=2, menuId=8), RoleMenu(roleId=2, menuId=9)]

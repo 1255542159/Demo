@@ -46,6 +46,7 @@
         <collection property="role" column="ID" ofType="com.example.demo.business.user.entity.Role"
                     select="com.example.demo.business.user.mapper.RoleMapper.findRolesByUserId"/>
     </resultMap>
+
     <update id="updateCarousel" parameterType="com.example.demo.business.user.entity.Image">
         update image set
         <if test="url != null">

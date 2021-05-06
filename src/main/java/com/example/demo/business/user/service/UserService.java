@@ -4,6 +4,7 @@ import com.example.demo.base.BaseService;
 import com.example.demo.base.ResponseVo;
 import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;

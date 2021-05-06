@@ -116,6 +116,9 @@
         <if test="loginIp != null">
             LOGIN_IP = #{loginIp},
         </if>
+        <if test="sign != null">
+            SIGN = #{sign},
+        </if>
         UPDATE_TIME = now()
         where ID = #{id};
     </update>
@@ -148,7 +151,7 @@
 
     </select>
     <select id="findAll" resultType="com.example.demo.business.user.entity.User">
-
+            select *from `user`
     </select>
     <select id="getListByClubId" resultMap="userMap">
         select
@@ -185,7 +188,9 @@
         </if>
          and STATUS = 0
     </select>
-
+    <select id="isExistSno" resultType="com.example.demo.business.user.entity.User">
+        select *from `user` where sno = #{sno} and STATUS = 0
+    </select>
 
 
 </mapper>

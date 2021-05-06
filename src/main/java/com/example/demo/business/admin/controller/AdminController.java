@@ -1,6 +1,7 @@
 package com.example.demo.business.admin.controller;
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.admin.entity.Settings;
 import com.example.demo.business.admin.service.ActivityService;
 import com.example.demo.business.admin.service.impl.AdminServiceImpl;
 import com.example.demo.business.user.entity.Image;
@@ -150,4 +151,21 @@ public class AdminController{
         return adminService.deleteCarousel(id);
     }
 
+    /**
+     *关于设置
+     * @return
+     */
+    @PostMapping("/save/about")
+    public ResponseVo saveAbout(@RequestBody Settings settings) {
+        return adminService.saveAbout(settings);
+    }
+
+    /**
+     *关于设置
+     * @return
+     */
+    @GetMapping("/get/about")
+    public ResponseVo getAbout() {
+        return adminService.getAbout();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.business.admin.mapper;
 
+import com.example.demo.business.admin.entity.Settings;
 import com.example.demo.business.user.entity.Image;
 import com.example.demo.business.user.entity.Role;
 import com.example.demo.business.user.entity.RoleMenu;
@@ -35,5 +36,6 @@ public interface AdminMapper {
     int getActivityCount();
 
     HashMap<String, Object> loginLog(String id);
+
 
 }

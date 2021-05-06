@@ -75,7 +75,7 @@ public class PortalServiceImpl implements PortalService {
     }
 
     @Override
-    public ResponseVo getActivityUserInfo(String id) {
+    public ResponseVo getUserInfoById(String id) {
             UserVo data = portalMapper.getActivityUserInfo(id);
             return ResponseVo.SUCCESS().setData(data);
     }

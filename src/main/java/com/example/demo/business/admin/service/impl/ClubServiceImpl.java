@@ -94,6 +94,7 @@ public class ClubServiceImpl implements ClubService {
             entity.setClubCreator(currentUser.getName());
             entity.setId(String.valueOf(idWorker.nextId()));
             entity.setStatus(Constants.ActivityStatus.TO_AUDIT);
+            entity.setIsDelete(0);
             entity.setCreateTime(new Date());
             boolean success = clubMapper.save(entity) == 1;
             if (!success) {

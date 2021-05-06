@@ -2,6 +2,7 @@ package com.example.demo.business.admin.service;
 
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.admin.entity.Settings;
 import com.example.demo.business.user.entity.Image;
 
 /**
@@ -33,4 +34,8 @@ public interface AdminService {
     ResponseVo getActivityCount();
 
     ResponseVo loginLog();
+
+    ResponseVo saveAbout(Settings settings);
+
+    ResponseVo getAbout();
 }

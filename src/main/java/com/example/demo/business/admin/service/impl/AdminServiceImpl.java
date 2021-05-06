@@ -1,8 +1,10 @@
 package com.example.demo.business.admin.service.impl;
 
 import com.example.demo.base.ResponseVo;
+import com.example.demo.business.admin.entity.Settings;
 import com.example.demo.business.admin.mapper.AdminMapper;
 import com.example.demo.business.admin.mapper.RoleMenuMapper;
+import com.example.demo.business.admin.mapper.SettingsMapper;
 import com.example.demo.business.admin.service.AdminService;
 import com.example.demo.business.user.entity.*;
 import com.example.demo.business.user.mapper.UserMapper;
@@ -19,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.tools.Tool;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author joy
@@ -35,7 +34,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminMapper adminMapper;
-
+    @Autowired
+    private SettingsMapper settingsMapper;
     @Autowired
     private UserMapper userMapper;
 
@@ -163,4 +163,29 @@ public class AdminServiceImpl implements AdminService {
         return ResponseVo.SUCCESS().setData(data);
     }
 
+    @Override
+    public ResponseVo saveAbout(Settings settings) {
+        settings.setId(String.valueOf(idWorker.nextId()));
+        //查询是否存在
+        Settings settings1 = settingsMapper.findSettingsByKey(settings.getKey());
+        boolean  success = false;
+        if(Objects.isNull(settings1)){
+          success = settingsMapper.save(settings) == 1;
+        }else {
+            settings1.setKey(settings.getKey());
+            settings1.setValue(settings.getValue());
+            success = settingsMapper.update(settings1) == 1;
+        }
+        if(!success){
+            return ResponseVo.FAILURE().setMsg("设置失败");
+        }
+
+        return ResponseVo.SUCCESS().setMsg("设置成功");
+    }
+
+    @Override
+    public ResponseVo getAbout() {
+        Settings settings = settingsMapper.findSettingsByKey("about");
+        return ResponseVo.SUCCESS().setData(settings);
+    }
 }

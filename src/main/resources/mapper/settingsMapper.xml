@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.business.admin.mapper.SettingsMapper">
+
+    <insert id="save">
+        insert into settings(ID,`KEY`,`VALUE`,CREATE_TIME)values (#{id},#{key},#{value},now())
+    </insert>
+    <update id="update" parameterType="com.example.demo.business.admin.entity.Settings">
+        update settings set
+        <if test="key != null">
+            `KEY` =#{key},
+        </if>
+        <if test="value != null">
+           `VALUE` =#{value},
+        </if>
+        UPDATE_TIME = now()
+        where ID =#{id}
+    </update>
+    <select id="findSettingsByKey" resultType="com.example.demo.business.admin.entity.Settings">
+        select *from settings where `KEY` = #{key}
+    </select>
+
+</mapper>

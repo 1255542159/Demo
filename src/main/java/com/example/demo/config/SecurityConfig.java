@@ -79,7 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 登录URL
                 .antMatchers("/login").permitAll()
+                .antMatchers("/user/export").permitAll()
+                .antMatchers("/user/image/uploadImage").permitAll()
+                .antMatchers("/club/addClub").permitAll()
                 .antMatchers("/portal/**").permitAll()
+                .antMatchers("/admin/get/about").permitAll()
                 .antMatchers("/user/addPersonnel",
                         "/user/check-token",
                         "/user/uploadImage",

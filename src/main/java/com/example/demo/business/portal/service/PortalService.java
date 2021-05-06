@@ -36,5 +36,5 @@ public interface PortalService{
 
     ResponseVo getClubDetail(String id);
 
-    ResponseVo getActivityUserInfo(String id);
+    ResponseVo getUserInfoById(String id);
 }

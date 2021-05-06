@@ -59,7 +59,7 @@ public class PortalController {
     }
 
     @GetMapping("/userInfo/{id}")
-    public ResponseVo getActivityUserInfo(@PathVariable(value = "id") String id){
-        return portalService.getActivityUserInfo(id);
+    public ResponseVo getUserInfoById(@PathVariable(value = "id") String id){
+        return portalService.getUserInfoById(id);
     }
 }

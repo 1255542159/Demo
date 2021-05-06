@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.tools.Tool;
 import java.io.IOException;
 import java.util.*;
 
@@ -361,6 +362,11 @@ public class UserServiceImpl implements UserService {
         }
         if(entity.getSno().length() != 11){
             return ResponseVo.FAILURE().setMsg("学号不合法");
+        }
+        //检查学号是否已存在
+        User sno = userMapper.isExistSno(entity.getSno());
+        if(!Objects.isNull(sno)){
+            return ResponseVo.FAILURE().setMsg("该学号已存在");
         }
         //先去查询当前是否存在该账户
         User userByPhone = userMapper.findUserByPhone(entity.getPhone());
