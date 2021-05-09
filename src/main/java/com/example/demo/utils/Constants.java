@@ -1,5 +1,7 @@
 package com.example.demo.utils;
 
+import io.swagger.models.auth.In;
+
 /**
  * @author joy
  * @version 1.0
@@ -23,6 +25,7 @@ public interface Constants {
         String ROLE_CLUB = "ROLE_CLUB";
         String ROLE_USER = "ROLE_USER";
     }
+
 
     interface RoleId {
         String ROLE_ADMIN = "1";

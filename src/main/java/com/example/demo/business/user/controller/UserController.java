@@ -5,10 +5,13 @@ import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.mapper.UserMapper;
 import com.example.demo.business.user.service.UserService;
+import com.example.demo.utils.Constants;
 import com.example.demo.utils.Tools;
+import com.github.pagehelper.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
@@ -109,7 +112,14 @@ public class UserController {
      */
     @GetMapping("/export")
     public void test(HttpServletResponse response) {
-        List<User> all = userMapper.findAll();
+        User currentUser = Tools.getCurrentUser();
+        List<User> all = null;
+        if(currentUser.getRoles().getRoleName().equals(Constants.Role.ROLE_ADMIN)){
+            all = userMapper.findAll();
+        }else {
+           all = userMapper.findAllByClubId(currentUser.getClubId());
+        }
+
         Tools.exportForExcel(response,all);
     }
 
@@ -204,5 +214,22 @@ public class UserController {
         return userService.getActivityInfo();
     }
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    /**
+     * 重置密码
+     *
+     * @param user
+     * @return
+     */
+    @PutMapping("/resetPwd")
+    public ResponseVo resetPwd(@RequestBody User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        boolean success = userMapper.resetPassWordById(user) == 1;
+        if (!success){
+            return ResponseVo.FAILURE().setMsg("修改失败");
+        }
+        return ResponseVo.SUCCESS().setMsg("修改成功");
+    }
 
 }

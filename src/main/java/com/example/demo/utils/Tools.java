@@ -126,7 +126,7 @@ public class Tools {
             content[i][4] = list.get(i).getEmail();
 
         }
-        String fileName = "test.xls";
+        String fileName = "学生信息.xls";
         OutputStream os = null;
         try {
             HSSFWorkbook wb = gethssfworkbook(sheetName, title, content, null);

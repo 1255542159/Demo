@@ -6,6 +6,7 @@ import com.example.demo.business.user.entity.Menu;
 import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.entity.UserVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -89,4 +90,10 @@ public interface UserMapper extends BaseMapper<User> {
     List<Image> getImageList(String userId, String original);
 
     User isExistSno(String sno);
+
+    List<User> findAllByClubId(@Param("clubId") String clubId);
+
+
+    int resetPassWordById(User user);
+
 }

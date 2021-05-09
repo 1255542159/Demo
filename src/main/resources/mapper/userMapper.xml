@@ -122,6 +122,14 @@
         UPDATE_TIME = now()
         where ID = #{id};
     </update>
+    <update id="resetPassWordById" parameterType="com.example.demo.business.user.entity.User">
+        update `user` set
+        <if test="password != null">
+            PASSWORD = #{password},
+        </if>
+        UPDATE_TIME = now()
+        where ID = #{id};
+    </update>
     <delete id="remove">
         delete from `user` where ID =#{id}
     </delete>
@@ -151,7 +159,7 @@
 
     </select>
     <select id="findAll" resultType="com.example.demo.business.user.entity.User">
-            select *from `user`
+            select *from `user` where STATUS = 0
     </select>
     <select id="getListByClubId" resultMap="userMap">
         select
@@ -190,6 +198,9 @@
     </select>
     <select id="isExistSno" resultType="com.example.demo.business.user.entity.User">
         select *from `user` where sno = #{sno} and STATUS = 0
+    </select>
+    <select id="findAllByClubId" resultType="com.example.demo.business.user.entity.User">
+        select *from `user` where STATUS = 0 and CLUB_ID = #{clubId}
     </select>
 
 

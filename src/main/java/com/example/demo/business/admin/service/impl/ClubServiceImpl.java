@@ -8,6 +8,7 @@ import com.example.demo.business.user.entity.Audit;
 import com.example.demo.business.user.entity.User;
 import com.example.demo.business.user.mapper.AuditMapper;
 import com.example.demo.business.user.mapper.UserMapper;
+import com.example.demo.business.user.mapper.UserRoleMapper;
 import com.example.demo.utils.Constants;
 import com.example.demo.utils.SnowflakeIdWorker;
 import com.example.demo.utils.Tools;
@@ -41,6 +42,9 @@ public class ClubServiceImpl implements ClubService {
     private AuditMapper auditMapper;
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public ResponseVo getList(int page, int size, int status, String keyWords) {
@@ -117,11 +121,15 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public ResponseVo update(Club entity) {
-        boolean success;
-        success = clubMapper.update(entity) == 1;
         User user = new User();
         user.setId(entity.getLeaderId());
         user.setClubId(entity.getId());
+        boolean success;
+        success = clubMapper.update(entity) == 1;
+        //如果审核通过将用户的角色变更为社团管理员
+        if(entity.getStatus() == 1){
+            userRoleMapper.updateUserRole(entity.getLeaderId(),Constants.RoleId.ROLE_CLUB);
+        }
         success = success && userMapper.update(user) == 1;
         if (!success) {
             log.error("clubUpdate: update club failed data={}",entity);
